@@ -6,7 +6,7 @@ A C library for numerical optimization and approximations.
 
 [![Build & Test](https://github.com/zhuanglinsheng/impf/actions/workflows/cmake.yml/badge.svg)](https://github.com/zhuanglinsheng/impf/actions/workflows/cmake.yml) 
 
-[Documentations](./docs/index.html) 
+[Documentations](https://zhuanglinsheng.github.io/impf/) 
 
 
 
