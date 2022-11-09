@@ -27,7 +27,7 @@ Building IMPF requires the following to be installed:
 
 - [CMake](https://cmake.org/) 
 - A C compiler, e.g. [GCC](https://gcc.gnu.org/) or [Clang](https://clang.llvm.org/) 
-- [BLAS](https://netlib.org/blas/) and [LAPACK](https://netlib.org/lapack/), eg [OpenBLAS](https://www.openblas.net/) 
+- [BLAS](https://netlib.org/blas/) and [LAPACK](https://netlib.org/lapack/), e.g. [OpenBLAS](https://www.openblas.net/) 
 
 ### Installation
 
