@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['polynomial_20approximation_0',['Polynomial Approximation',['../group__module__poly__approx.html',1,'']]]
+  ['nonlinear_20least_20square_0',['Nonlinear Least Square',['../group__module__nls.html',1,'']]],
+  ['norms_20and_20distances_1',['Norms and Distances',['../group__module__blas__distances.html',1,'']]]
 ];

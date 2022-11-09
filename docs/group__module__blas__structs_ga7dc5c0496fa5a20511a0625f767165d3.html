@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>IMPF: example/dts/eg_dts_impf_mat_transmajor.c Source File</title>
+<title>IMPF: impf_mat_transmajor</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -73,7 +73,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('eg__dts__impf__mat__transmajor_8c_source.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('group__module__blas__structs_ga7dc5c0496fa5a20511a0625f767165d3.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -98,42 +98,79 @@ $(document).ready(function(){initNavTree('eg__dts__impf__mat__transmajor_8c_sour
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">eg_dts_impf_mat_transmajor.c</div></div>
-</div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;<a class="code" href="impf_8h.html">impf/impf.h</a>&gt;</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="keywordtype">int</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>main(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>{</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>    <span class="comment">/* Create a matrix */</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <span class="keywordtype">double</span> data[] = {1., 2., 3., 4., 5., 6.};</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    <a class="code hl_struct" href="structimpf__t__matrix.html">impf_t_matrix</a> mat = {data, 2, 3, <a class="code hl_enumvalue" href="group__module__blas__structs_gab6c1d5c305ca7551094c0dc0e61e48d0.html#ggab6c1d5c305ca7551094c0dc0e61e48d0ad67c077ad20443e342f819cdbe46318a">IMPF_MAT_ROW_MAJOR</a>};</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="comment">/* Change the major of a matrix */</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordtype">double</span> buf[6];</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_function" href="group__module__blas__structs_ga7dc5c0496fa5a20511a0625f767165d3.html#ga7dc5c0496fa5a20511a0625f767165d3">impf_mat_transmajor</a>(&amp;mat, buf);</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="comment">/* Print the matrix */</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    FILE * out = fopen(<span class="stringliteral">&quot;eg_dts_impf_mat_transmajor.out&quot;</span>, <span class="stringliteral">&quot;w&quot;</span>);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">if</span>(NULL == out) <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <a class="code hl_function" href="group__module__blas__structs_gac8485bd0e411740733f654bbb50d2791.html#gac8485bd0e411740733f654bbb50d2791">impf_fprint_mat_sci</a>(out, &amp;mat, 100, 1);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    fclose(out);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
+<a id="ga7dc5c0496fa5a20511a0625f767165d3" name="ga7dc5c0496fa5a20511a0625f767165d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7dc5c0496fa5a20511a0625f767165d3">&#9670;&#160;</a></span>impf_mat_transmajor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void impf_mat_transmajor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structimpf__t__matrix.html">impf_t_matrix</a> *&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>buf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change the major of a matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">mat</td><td>the matrix to be transmajored. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">buf</td><td>a double array of the length mat-&gt;ncol * mat-&gt;nrow.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: file <code><a class="el" href="eg__dts__impf__mat__transmajor_8c_source.html">eg_dts_impf_mat_transmajor.c</a></code> </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="impf_8h.html">impf/impf.h</a>&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span></div>
+<div class="line">main(<span class="keywordtype">void</span>)</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">/* Create a matrix */</span></div>
+<div class="line">    <span class="keywordtype">double</span> data[] = {1., 2., 3., 4., 5., 6.};</div>
+<div class="line">    <a class="code hl_struct" href="structimpf__t__matrix.html">impf_t_matrix</a> mat = {data, 2, 3, <a class="code hl_enumvalue" href="group__module__blas__structs_gab6c1d5c305ca7551094c0dc0e61e48d0.html#ggab6c1d5c305ca7551094c0dc0e61e48d0ad67c077ad20443e342f819cdbe46318a">IMPF_MAT_ROW_MAJOR</a>};</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">/* Change the major of a matrix */</span></div>
+<div class="line">    <span class="keywordtype">double</span> buf[6];</div>
+<div class="line">    <a class="code hl_function" href="group__module__blas__structs_ga7dc5c0496fa5a20511a0625f767165d3.html#ga7dc5c0496fa5a20511a0625f767165d3">impf_mat_transmajor</a>(&amp;mat, buf);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">/* Print the matrix */</span></div>
+<div class="line">    FILE * out = fopen(<span class="stringliteral">&quot;eg_dts_impf_mat_transmajor.out&quot;</span>, <span class="stringliteral">&quot;w&quot;</span>);</div>
+<div class="line">    <span class="keywordflow">if</span>(NULL == out) <span class="keywordflow">return</span> -1;</div>
+<div class="line">    <a class="code hl_function" href="group__module__blas__structs_gac8485bd0e411740733f654bbb50d2791.html#gac8485bd0e411740733f654bbb50d2791">impf_fprint_mat_sci</a>(out, &amp;mat, 100, 1);</div>
+<div class="line">    fclose(out);</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
 <div class="ttc" id="agroup__module__blas__structs_ga7dc5c0496fa5a20511a0625f767165d3_html_ga7dc5c0496fa5a20511a0625f767165d3"><div class="ttname"><a href="group__module__blas__structs_ga7dc5c0496fa5a20511a0625f767165d3.html#ga7dc5c0496fa5a20511a0625f767165d3">impf_mat_transmajor</a></div><div class="ttdeci">void impf_mat_transmajor(impf_t_matrix *mat, double *buf)</div><div class="ttdoc">Change the major of a matrix.</div></div>
 <div class="ttc" id="agroup__module__blas__structs_gab6c1d5c305ca7551094c0dc0e61e48d0_html_ggab6c1d5c305ca7551094c0dc0e61e48d0ad67c077ad20443e342f819cdbe46318a"><div class="ttname"><a href="group__module__blas__structs_gab6c1d5c305ca7551094c0dc0e61e48d0.html#ggab6c1d5c305ca7551094c0dc0e61e48d0ad67c077ad20443e342f819cdbe46318a">IMPF_MAT_ROW_MAJOR</a></div><div class="ttdeci">@ IMPF_MAT_ROW_MAJOR</div><div class="ttdoc">Matrix is stored by row major</div><div class="ttdef"><b>Definition:</b> <a href="impf__basic__blas_8h_source.html#l00044">impf_basic_blas.h:44</a></div></div>
 <div class="ttc" id="agroup__module__blas__structs_gac8485bd0e411740733f654bbb50d2791_html_gac8485bd0e411740733f654bbb50d2791"><div class="ttname"><a href="group__module__blas__structs_gac8485bd0e411740733f654bbb50d2791.html#gac8485bd0e411740733f654bbb50d2791">impf_fprint_mat_sci</a></div><div class="ttdeci">void impf_fprint_mat_sci(FILE *out, const impf_t_matrix *mat, const unsigned int width, const unsigned foot)</div><div class="ttdoc">Print a impf_t_matrix in scientific notation to file out.</div></div>
 <div class="ttc" id="aimpf_8h_html"><div class="ttname"><a href="impf_8h.html">impf.h</a></div><div class="ttdoc">User Interfaces.</div></div>
 <div class="ttc" id="astructimpf__t__matrix_html"><div class="ttname"><a href="structimpf__t__matrix.html">impf_t_matrix</a></div><div class="ttdoc">Real matrix.</div><div class="ttdef"><b>Definition:</b> <a href="impf__basic__blas_8h_source.html#l00055">impf_basic_blas.h:56</a></div></div>
-</div><!-- fragment --></div><!-- contents -->
+</div><!-- fragment --> <div class="fragment"><div class="line"> 1.000000000e+00   2.000000000e+00   3.000000000e+00  </div>
+<div class="line"> 4.000000000e+00   5.000000000e+00   6.000000000e+00  </div>
+<div class="line">Matrix of (2x3), col-major</div>
+</div><!-- fragment --> 
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_cfafba98a580ce4b62f8a6fa96d7cbb0.html">example</a></li><li class="navelem"><a class="el" href="dir_0a6981b8368411a772827ab6f6f55f04.html">dts</a></li><li class="navelem"><b>eg_dts_impf_mat_transmajor.c</b></li>
+    <li class="navelem"><a class="el" href="group__module__blas__structs.html">Data Structures of Vector and Matrix</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

@@ -12,5 +12,6 @@ var modules =
     [ "Jacobian Matrix", "group__module__ndiff__jacb.html", "group__module__ndiff__jacb" ],
     [ "Root Finding", "group__module__root.html", "group__module__root" ],
     [ "Nonlinear Least Square", "group__module__nls.html", null ],
-    [ "Polynomial Approximation", "group__module__poly__approx.html", "group__module__poly__approx" ]
+    [ "Polynomial Approximation", "group__module__poly__approx.html", "group__module__poly__approx" ],
+    [ "Module_opt", "group__module__opt.html", null ]
 ];
