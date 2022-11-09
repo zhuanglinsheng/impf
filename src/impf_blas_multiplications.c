@@ -153,7 +153,8 @@ impf_subrt_mm_mul(
     const char transB,                 /* [in] transpose the [sub-]matrix B or not, 'T' or 'N'. */
     const double beta,                 /* [in] the 2nd scaling factor. */
     impf_t_matrix * C,                 /* [in, out] the matrix C: C[^T] of dim M by N. */
-    const impf_t_submatinfo * submatC) /* [in] the sub-matrix information of C. */
+    const impf_t_submatinfo * submatC, /* [in] the sub-matrix information of C. */
+    double * buf)                      /* a double array of length M * N if C is row major and beta is nonzero. */
 {
     assert(NULL != A);
     assert(NULL != B);
@@ -197,11 +198,11 @@ impf_subrt_mm_mul(
             impf_t_submatinfo submatA_trans = {
                 submatA->jloc, submatA->iloc, submatA->ncol, submatA->nrow
             };
-            impf_subrt_mm_mul(alpha, &A_trans, &submatA_trans, transA_trans, B, submatB, transB, beta, C, submatC);
+            impf_subrt_mm_mul(alpha, &A_trans, &submatA_trans, transA_trans, B, submatB, transB, beta, C, submatC, buf);
         }
         else
         {
-            impf_subrt_mm_mul(alpha, &A_trans, NULL, transA_trans, B, submatB, transB, beta, C, submatC);
+            impf_subrt_mm_mul(alpha, &A_trans, NULL, transA_trans, B, submatB, transB, beta, C, submatC, buf);
         }
     }
     else if(IMPF_MAT_ROW_MAJOR == B->major)
@@ -216,11 +217,11 @@ impf_subrt_mm_mul(
             impf_t_submatinfo submatB_trans = {
                 submatB->jloc, submatB->iloc, submatB->ncol, submatB->nrow
             };
-            impf_subrt_mm_mul(alpha, A, submatA, transA, &B_trans, &submatB_trans, transB_trans, beta, C, submatC);
+            impf_subrt_mm_mul(alpha, A, submatA, transA, &B_trans, &submatB_trans, transB_trans, beta, C, submatC, buf);
         }
         else
         {
-            impf_subrt_mm_mul(alpha, A, submatA, transA, &B_trans, NULL, transB_trans, beta, C, submatC);
+            impf_subrt_mm_mul(alpha, A, submatA, transA, &B_trans, NULL, transB_trans, beta, C, submatC, buf);
         }
     }
     else if(IMPF_MAT_ROW_MAJOR == C->major)
@@ -231,9 +232,9 @@ impf_subrt_mm_mul(
         }
         else
         {
-            impf_mat_transmajor(C);
+            impf_mat_transmajor(C, buf);
         }
-        impf_subrt_mm_mul(alpha, A, submatA, transA, B, submatB, transB, beta, C, submatC);
+        impf_subrt_mm_mul(alpha, A, submatA, transA, B, submatB, transB, beta, C, submatC, buf);
     }
 }
 

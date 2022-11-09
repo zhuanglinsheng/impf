@@ -5,7 +5,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <impf/impf_basic.h>
 
@@ -54,33 +53,27 @@ impf_mat_transpose(impf_t_matrix * mat)
 }
 
 void
-impf_mat_transmajor(impf_t_matrix * mat)
+impf_mat_transmajor(impf_t_matrix * mat, double * buf)
 {
+    assert(NULL != buf);
     unsigned long int size = sizeof(double) * mat->ncol * mat->nrow;
-    double * data = malloc(size);
     int i, j;
 
-    if(NULL == data)
-    {
-        printf("Memory allocation failure in the function 'impf_mat_transmajor(impf_t_matrix *)'.\n");
-        exit(EXIT_FAILURE);
-    }
     for(i = 0; i<mat->nrow; i++)
     {
         for(j = 0; j<mat->ncol; j++)
         {
-            *(data + j * mat->nrow + i) = *(mat->data + i * mat->ncol + j);
+            *(buf + j * mat->nrow + i) = *(mat->data + i * mat->ncol + j);
         }
     }
-    memcpy(mat->data, data, size);
-    free(data);
+    memcpy(mat->data, buf, size);
     mat->major = IMPF_MAT_COL_MAJOR == mat->major ? \
         IMPF_MAT_ROW_MAJOR : IMPF_MAT_COL_MAJOR;
 }
 
 /* just for testing */
 void
-impf_mat_transmajor_inplace(impf_t_matrix * mat)
+impf_mat_transmajor_inplace(impf_t_matrix * mat, char * buf)
 {
     if(1 >= mat->nrow || 1 >= mat->ncol)
     {
@@ -110,21 +103,14 @@ impf_mat_transmajor_inplace(impf_t_matrix * mat)
             double vstart;
             unsigned long int a, pa, start, lenm1;
             unsigned long int len = mat->nrow * mat->ncol;
-            char * recorder = malloc(len);
 
-            if(NULL == recorder)
-            {
-                printf("Memory allocation failure in the function 'impf_mat_transmajor_2(impf_t_matrix *)'.\n");
-                exit(EXIT_FAILURE);
-            }
-
-            memset(recorder, 0, len);
+            memset(buf, 0, len);
             start = 1;
             lenm1 = len - 1;
-            recorder[0] = 1;
-            recorder[lenm1] = 1;
+            buf[0] = 1;
+            buf[lenm1] = 1;
         LOOP:
-            for(; start<lenm1 && recorder[start]; start++);
+            for(; start<lenm1 && buf[start]; start++);
             if(start == lenm1) goto END;
             vstart = *(mat->data + start);
             a = start;
@@ -133,22 +119,21 @@ impf_mat_transmajor_inplace(impf_t_matrix * mat)
             while(start != pa)
             {
                 *(mat->data + a) = *(mat->data + pa);
-                recorder[a] = 1;
+                buf[a] = 1;
                 a = pa;
                 pa = (mat->ncol * a) % lenm1;
             }
             *(mat->data + a) = vstart;
-            recorder[a] = 1;
+            buf[a] = 1;
             goto LOOP;
-        END:
-            free(recorder);
+        END:;
         }
         mat->major = IMPF_MAT_COL_MAJOR;
     }
     else
     {
         impf_mat_transpose(mat);
-        impf_mat_transmajor(mat);
+        impf_mat_transmajor_inplace(mat, buf);
         impf_mat_transpose(mat);
     }
 }

@@ -9,7 +9,8 @@ main(void)
     impf_t_matrix mat = {data, 2, 3, IMPF_MAT_ROW_MAJOR};
 
     /* Change the major of a matrix */
-    impf_mat_transmajor(&mat);
+    double buf[6];
+    impf_mat_transmajor(&mat, buf);
 
     /* Print the matrix */
     FILE * out = fopen("eg_dts_impf_mat_transmajor.out", "w");

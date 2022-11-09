@@ -116,16 +116,20 @@ impf_mat_transpose(impf_t_matrix * mat);
 
 /**
  * \brief Change the major of a matrix.
+ * \param [in,out] mat the matrix to be transmajored.
+ * \param buf a double array of the length mat->ncol * mat->nrow.
  *
  * \details Example: file `eg_dts_impf_mat_transmajor.c`
  * \include eg_dts_impf_mat_transmajor.c
  * \include eg_dts_impf_mat_transmajor.out
  */
 void
-impf_mat_transmajor(impf_t_matrix * mat);
+impf_mat_transmajor(impf_t_matrix * mat, double * buf);
 
 /**
  * \brief Change the major of a matrix (just for testing).
+ * \param [in,out] mat the matrix to be transmajored.
+ * \param buf a char array of the length mat->ncol * mat->nrow.
  *
  * \details In-place matrix transpose \cite cate1977algorithm. Generally, the
  * inclass matrix transpose is slower than using auxiliary memory.
@@ -137,7 +141,7 @@ impf_mat_transmajor(impf_t_matrix * mat);
  * \include eg_dts_impf_mat_transmajor_inplace.out
  */
 void
-impf_mat_transmajor_inplace(impf_t_matrix * mat);
+impf_mat_transmajor_inplace(impf_t_matrix * mat, char * buf);
 
 /**
  * \brief Subtract the submatrix from big matrix.
@@ -533,6 +537,7 @@ impf_subrt_mv_mul(
  * \param [in] beta the 2nd scaling factor.
  * \param [in,out] C the matrix C: C[^T] of dim M by N.
  * \param [in] submatC to replace C with a sub-matrix of C.
+ * \param buf a double array of length M * N if C is row major and beta is nonzero.
  */
 void
 impf_subrt_mm_mul(
@@ -540,7 +545,7 @@ impf_subrt_mm_mul(
     const impf_t_matrix * A, const impf_t_submatinfo * submatA, const char transA,
     const impf_t_matrix * B, const impf_t_submatinfo * submatB, const char transB,
     const double beta,
-    impf_t_matrix * C, const impf_t_submatinfo * submatC);
+    impf_t_matrix * C, const impf_t_submatinfo * submatC, double * buf);
 /**@}*/
 
 #ifdef __cpluscplus
