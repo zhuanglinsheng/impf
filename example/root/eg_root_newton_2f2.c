@@ -13,13 +13,13 @@ double f2(const double x, const double y)
 
 int main(void)
 {
-    FILE * out = fopen("eg_root_impf_2f2_newton.out", "w");
+    FILE * out = fopen("eg_root_newton_2f2.out", "w");
     if(NULL == out) return -1;
 
     double x = -0.0; /* the initial guess */
     double y = -0.0;
 
-    if(IMPF_EXIT_SUCCESS == impf_subrt_2f2_root_newton(f1, f2, &x, &y, 1e-8, 1e-8, 1000))
+    if(IMPF_EXIT_SUCCESS == impf_subrt_root_newton_2f2(f1, f2, &x, &y, 1e-8, 1e-8, 1000))
     {
         fprintf(out, "x = %f, y = %f\n", x, y);
         fprintf(out, "f1(x, y) = %f\n", f1(x, y));

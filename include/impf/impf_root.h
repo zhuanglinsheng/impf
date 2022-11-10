@@ -54,12 +54,12 @@ extern "C" {
  * \param [in] tolf the error of function value at root.
  * \param [in] niter the maximum iteration epochs.
  *
- * Example file `eg_root_impf_1f1_newton.c`:
- * \include eg_root_impf_1f1_newton.c
- * \include eg_root_impf_1f1_newton.out
+ * Example file `eg_root_newton_1f1.c`:
+ * \include eg_root_newton_1f1.c
+ * \include eg_root_newton_1f1.out
  */
 impf_t_subrtstate
-impf_subrt_1f1_root_newton(
+impf_subrt_root_newton_1f1(
     impf_t_f1 f, double * x,
     const double tol, const double tolf, const unsigned int niter);
 
@@ -73,12 +73,12 @@ impf_subrt_1f1_root_newton(
  * \param [in] tolf the error of function value at root.
  * \param [in] niter the maximum iteration epochs.
  *
- * Example file `eg_root_impf_2f2_newton.c`:
- * \include eg_root_impf_2f2_newton.c
- * \include eg_root_impf_2f2_newton.out
+ * Example file `eg_root_newton_2f2.c`:
+ * \include eg_root_newton_2f2.c
+ * \include eg_root_newton_2f2.out
  */
 impf_t_subrtstate
-impf_subrt_2f2_root_newton(
+impf_subrt_root_newton_2f2(
     impf_t_f2 f1, impf_t_f2 f2, double * x, double * y,
     const double tol, const double tolf, const unsigned int niter);
 
@@ -94,12 +94,12 @@ impf_subrt_2f2_root_newton(
  * \param [in] tolf the error of function value at root.
  * \param [in] niter the maximum iteration epochs.
  *
- * Example file `eg_root_impf_3f3_newton.c`:
- * \include eg_root_impf_3f3_newton.c
- * \include eg_root_impf_3f3_newton.out
+ * Example file `eg_root_newton_3f3.c`:
+ * \include eg_root_newton_3f3.c
+ * \include eg_root_newton_3f3.out
  */
 impf_t_subrtstate
-impf_subrt_3f3_root_newton(
+impf_subrt_root_newton_3f3(
     impf_t_f3 f1, impf_t_f3 f2, impf_t_f3 f3,
     double * x, double * y, double * z,
     const double tol, const double tolf, const unsigned int niter);

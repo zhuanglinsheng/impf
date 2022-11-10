@@ -17,14 +17,14 @@ double f3(const double x, const double y, const double z)
 
 int main(void)
 {
-    FILE * out = fopen("eg_root_impf_3f3_newton.out", "w");
+    FILE * out = fopen("eg_root_newton_3f3.out", "w");
     if(NULL == out) return -1;
 
     double x = -0.0; /* the initial guess */
     double y = -0.0;
     double z = -0.0;
 
-    if(IMPF_EXIT_SUCCESS == impf_subrt_3f3_root_newton(f1, f2, f3, &x, &y, &z, 1e-8, 1e-8, 1000))
+    if(IMPF_EXIT_SUCCESS == impf_subrt_root_newton_3f3(f1, f2, f3, &x, &y, &z, 1e-8, 1e-8, 1000))
     {
         fprintf(out, "x = %f, y = %f, z = %f\n", x, y, z);
         fprintf(out, "f1(x, y, z) = %f\n", f1(x, y, z));

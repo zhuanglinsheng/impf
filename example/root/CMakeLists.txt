@@ -1,20 +1,20 @@
-add_executable(eg_root_impf_1f1_newton eg_root_impf_1f1_newton.c)
-target_link_libraries(eg_root_impf_1f1_newton impf m blas)
+add_executable(eg_root_newton_1f1 eg_root_newton_1f1.c)
+target_link_libraries(eg_root_newton_1f1 impf m blas)
 add_test(
-    NAME eg_root_impf_1f1_newton
-    COMMAND eg_root_impf_1f1_newton
+    NAME eg_root_newton_1f1
+    COMMAND eg_root_newton_1f1
 )
 
-add_executable(eg_root_impf_2f2_newton eg_root_impf_2f2_newton.c)
-target_link_libraries(eg_root_impf_2f2_newton impf m blas)
+add_executable(eg_root_newton_2f2 eg_root_newton_2f2.c)
+target_link_libraries(eg_root_newton_2f2 impf m blas)
 add_test(
-    NAME eg_root_impf_2f2_newton
-    COMMAND eg_root_impf_2f2_newton
+    NAME eg_root_newton_2f2
+    COMMAND eg_root_newton_2f2
 )
 
-add_executable(eg_root_impf_3f3_newton eg_root_impf_3f3_newton.c)
-target_link_libraries(eg_root_impf_3f3_newton impf m blas)
+add_executable(eg_root_newton_3f3 eg_root_newton_3f3.c)
+target_link_libraries(eg_root_newton_3f3 impf m blas)
 add_test(
-    NAME eg_root_impf_3f3_newton
-    COMMAND eg_root_impf_3f3_newton
+    NAME eg_root_newton_3f3
+    COMMAND eg_root_newton_3f3
 )

@@ -9,12 +9,12 @@ double f(const double x)
 
 int main(void)
 {
-    FILE * out = fopen("eg_root_impf_1f1_newton.out", "w");
+    FILE * out = fopen("eg_root_newton_1f1.out", "w");
     if(NULL == out) return -1;
 
     double x = -0.0; /* the initial guess */
 
-    if(IMPF_EXIT_SUCCESS == impf_subrt_1f1_root_newton(f, &x, 1e-8, 1e-8, 1000))
+    if(IMPF_EXIT_SUCCESS == impf_subrt_root_newton_1f1(f, &x, 1e-8, 1e-8, 1000))
     {
         fprintf(out, "x    = %f\n", x);
         fprintf(out, "f(x) = %f\n", f(x));
