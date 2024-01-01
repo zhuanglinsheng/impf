@@ -21,6 +21,13 @@ static int is_simplex_optimal(const double *table, const int n)
 	return 1;
 }
 
+/* Basis index should not exceeds the number of variables
+ */
+static int is_basis_valid(const int *basis, const int m, const int n)
+{
+	return maxabs_arri(basis, m, 1) <= n;
+}
+
 /* In simplex iteration, check whether value is improved.
  *
  * Return:
