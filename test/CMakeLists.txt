@@ -105,6 +105,13 @@ add_test(
 	COMMAND test_lp_simplex_6
 )
 
+add_executable(test_lp_simplex_7 test_lp_simplex_7.c)
+target_link_libraries(test_lp_simplex_7 impf)
+add_test(
+	NAME test_lp_simplex_7
+	COMMAND test_lp_simplex_7
+)
+
 add_executable(test_lp_simplex_netlib test_lp_simplex_netlib.c)
 target_link_libraries(test_lp_simplex_netlib impf)
 add_test(
