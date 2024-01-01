@@ -239,28 +239,6 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 	return 0;
 }
 
-/* Determine the size of (basic) simplex table
- *
- * "GE" constraint has a slack var and an artificial var, hence will generate
- * an additional variable than usual
- */
-static void simplex_table_size(const struct impf_LinearConstraint *constraints,
-			       const int m, const int n, int *nrow, int *ncol)
-{
-	int i;
-	*nrow = m + 1;
-	*ncol = m + n + 1;
-
-	for (i = 0; i < m; i++) {
-		const struct impf_LinearConstraint *cons = constraints + i;
-
-		if (impf_GE == cons->type && cons->rhs >= 0)
-			(*ncol)++;
-		if (impf_LE == cons->type && cons->rhs < 0)
-			(*ncol)++;
-	}
-}
-
 /* To create in heap (need to be released) simplex table, index set of basis
  * and constraint type recorder
  */
@@ -352,6 +330,28 @@ static void simplex_fill_conscoefs(double *table, const int ldtable, const struc
 			for (j = 0; j < n; j++)
 				table[j + row] = -cons->coef[j];
 		}
+	}
+}
+
+/* Determine the size of (basic) simplex table
+ *
+ * "GE" constraint has a slack var and an artificial var, hence will generate
+ * an additional variable than usual
+ */
+static void simplex_table_size_usul(const struct impf_LinearConstraint *constraints,
+				    const int m, const int n, int *nrow, int *ncol)
+{
+	int i;
+	*nrow = m + 1;
+	*ncol = m + n + 1;
+
+	for (i = 0; i < m; i++) {
+		const struct impf_LinearConstraint *cons = constraints + i;
+
+		if (impf_GE == cons->type && cons->rhs >= 0)
+			(*ncol)++;
+		if (impf_LE == cons->type && cons->rhs < 0)
+			(*ncol)++;
 	}
 }
 
@@ -478,7 +478,7 @@ static void delete_artif_cols(double *table, const int ldtable, const int m, con
 	}
 }
 
-/* Phase 1: get a BFS for the original problem
+/* Phase 1: get a BFS for the original problem using the usual way - artificial LP
  *
  * Work:
  * 	1. malloc for table, basis, constypes
@@ -493,7 +493,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, enum 
 	int nrow, ncol;
 	int nslack, nartif;
 
-	simplex_table_size(constraints, m, n, &nrow, &ncol);
+	simplex_table_size_usul(constraints, m, n, &nrow, &ncol);
 	*ldtable = ncol;  /* leading dimension of table in memory */
 	if (simplex_create_buffer(table, basis, constypes, m, nrow, *ldtable) == EXIT_FAILURE) {
 		*code = impf_MemoryAllocError;
