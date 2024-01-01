@@ -50,8 +50,11 @@ int main(void)
 	netlib_bm("80bau3b", 7, 9.8723216072E+05);
 	*/
 
-	/* ok
+	/* Low precision
 	netlib_bm("adlittle", 8, 2.2549496316E+05);
+	*/
+
+	/* ok
 	netlib_bm("afiro", 5, -4.6475314286E+02);
 	netlib_bm("agg", 3, -3.5991767287E+07);
 	netlib_bm("agg2", 4, -2.0239252356E+07);
