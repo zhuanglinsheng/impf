@@ -29,7 +29,7 @@ By the way, the name of this library `impf` means *implicit functions*, as it wa
 1. The suffix `_mfn` of all methods in this package means either "m functions of n variants" for problems of dimension <= 3, or "n-variant function that returns m-dimensionay array" for general problems, depending on specific propotype.
 2. Generally, we follow the [coding style](https://www.kernel.org/doc/html/v4.10/process/coding-style.html). The only exception is when function's prototype is too long. In this case, we use 120 columns instead of 80 columns.
 
-## Differentiation ([diff.h](./include/impf/diff.h))
+### Differentiation ([diff.h](./include/impf/diff.h))
 
 - [impf_diff_1f1](./src/diff_1f1.c), [impf_diff_1f2](./src/diff_1f2.c), [impf_diff_1f3](./src/diff_1f3.c), [impf_diff_1fn](./src/diff_1fn.c)
 - [impf_diff_2f1](./src/diff_2f1.c), [impf_diff_2f2](./src/diff_2f2.c), [impf_diff_2f3](./src/diff_2f3.c), [impf_diff_2fn](./src/diff_2fn.c)
@@ -40,7 +40,7 @@ Example:
 - [test_diff_mf1](./test/test_diff_mf1.c)(m = 1, 2, 3), [test_diff_mf2](./test/test_diff_mf2.c)(m = 1, 2, 3)
 - [test_diff_mf3](./test/test_diff_mf3.c)(m = 1, 2, 3), [test_diff_mfn](./test/test_diff_mfn.c)(m = 1, 2, 3, m)
 
-## Root Finding ([root.h](./include/impf/root.h))
+### Root Finding ([root.h](./include/impf/root.h))
 
 - [impf_root_1f1_bisection](./src/root_1f1_bisection.c), [impf_root_1f1_secant](./src/root_1f1_secant.c), [impf_root_1f1_newton](./src/root_1f1_newton.c)
 - [impf_root_2f2_newton](./src/root_2f2_newton.c), [impf_root_3f3_newton](./src/root_3f3_newton.c), [impf_root_nfn_newton](./src/root_nfn_newton.c)
@@ -48,10 +48,10 @@ Example:
 Example:
 - [test_root_1f1.c](test/test_root_1f1.c), [test_root_2f2.c](test/test_root_2f2.c), [test_root_3f3.c](test/test_root_3f3.c), [test_root_nfn.c](test/test_root_nfn.c)
 
-## Linear Programming ([fmin.h](./include/impf/fmin.h) and [lp.h](./include/impf/lp.h))
+### Linear Programming ([fmin.h](./include/impf/fmin.h) & [lp.h](./include/impf/lp.h))
 
 - [impf_lp_readmps](./src/lp_readmps.c): import large scale LP model from MPS file
-- [impf_lp_simplex](./src/lp_simplex.c): simplex algorithm
+- [impf_lp_simplex](./src/lp_simplex_gen.c): simplex algorithm
 
 Example:
 - [test_lp_simplex_1.c](test/test_lp_simplex_1.c), [test_lp_simplex_2.c](test/test_lp_simplex_2.c), [test_lp_simplex_3.c](test/test_lp_simplex_3.c)
