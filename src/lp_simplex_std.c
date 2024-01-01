@@ -432,6 +432,39 @@ static void simplex_fill_artiflp_basis(int *basis, const enum impf_ConstraintTyp
 	}
 }
 
+static void doubleransf_artificial_basis(double *table, int ldtable, int *basis,
+				const int m, const int nreal, int nvar)
+{
+	int i, j, q = nvar;
+	double ele, maxv = __impf_NINF__;
+
+	if (is_basis_valid(basis, m, nreal))
+		return;
+	for (i = 0; i < m; i++) {
+		if (basis[i] <nreal)
+			continue;
+		for (j = 0; j < nreal; j++) {
+			ele = __impf_ABS__(table[j + (i + 1) * ldtable]);
+			if (ele > maxv) {
+				maxv = ele;
+				q = j;
+			}
+		}
+		if (maxv < 1e-9) {
+			table[nvar + (i + 1) * ldtable] = 0.;
+			memset(table + (i + 1) * ldtable, 0, nreal * sizeof(double));
+			continue;
+		}
+		simplex_pivot_core(table, ldtable, m, nvar, i, q, 1, 1, 0);
+		basis[i] = q;
+#ifdef IMPF_MODE_DEV
+		printf("in 'doubleransf_artificial_basis'\n");
+		printf("switch %i <----> %i\n", i, q);
+#endif
+		q = nvar;
+	}
+}
+
 static void simplex_fill_artiflp_nrcost(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
 					const int m, const int ncol)
 {
@@ -517,6 +550,7 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 	/*
 	 * Phase 2: Solve the original problem
 	 */
+	doubleransf_artificial_basis(table, ldtable, basis, m, n + nslack, nvar);
 	for (j = 0; j < n; j++)  /* Fill in original objective coefficients */
 		table[j] = -objective[j];
 	if (nartif > 0) {  /* Delete artificial columns */
