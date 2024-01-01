@@ -37,6 +37,7 @@ enum impf_ErrorCode {
  ******************************************************************************/
 
 int is_in_arri(const int idx, const int *idxset, const int len);
+int maxabs_arri(const int *arr, const int len, const int inc);
 
 /*******************************************************************************
  * Utils of "arrd-info-family"

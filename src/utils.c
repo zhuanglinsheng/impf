@@ -16,6 +16,20 @@ int is_in_arri(const int idx, const int *idxset, const int len)
 	return 0;
 }
 
+int maxabs_arri(const int *arr, const int len, const int inc)
+{
+	int i, ele, maxv = __impf_NINF__;
+
+	assert(inc >= 1);
+
+	for (i = 0; i < len; i++) {
+		ele = __impf_ABS__(arr[i]);
+		if (ele > maxv)
+			maxv = ele;
+	}
+	return maxv;
+}
+
 int argmaxabs_arrd(const double *arr, const int len, const int inc)
 {
 	int i, idx = 0;
