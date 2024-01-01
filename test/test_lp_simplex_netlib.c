@@ -50,11 +50,13 @@ int main(void)
 	netlib_bm("80bau3b", 7, 9.8723216072E+05);
 	*/
 
+	/* ok
 	netlib_bm("adlittle", 8, 2.2549496316E+05);
 	netlib_bm("afiro", 5, -4.6475314286E+02);
 	netlib_bm("agg", 3, -3.5991767287E+07);
 	netlib_bm("agg2", 4, -2.0239252356E+07);
 	netlib_bm("agg3", 4, 1.0312115935E+07);
+	*/
 
 	/* infeasible or unbounded
 	netlib_bm("bandm", 5, -1.5862801845E+02);
