@@ -15,7 +15,7 @@ static int is_simplex_optimal(const double *table, const int n)
 	int j;
 
 	for (j = 0; j < n; j++) {
-		if (table[j] > __impf_SPLX_OPTIMAL__)
+		if (table[j] > __impf_CTR_SPLX_OPTIMAL__)
 			return 0;
 	}
 	return 1;
@@ -37,7 +37,7 @@ static int is_basis_valid(const int *basis, const int m, const int n)
  */
 static int check_simplex_degeneracy(const double *table, const int n, const double old_value)
 {
-	if (old_value <= table[n] + __impf_SPLX_DEGEN__) {
+	if (old_value <= table[n] + __impf_CHC_SPLX_DEGEN__) {
 		if (is_simplex_optimal(table, n))
 			return 1;
 		return 2;
@@ -59,7 +59,7 @@ static int simplex_pivot_leave_rule(const double *table, const int ldtable,
 		y_i_0 = table[n + (i + 1) * ldtable];
 		y_i_q = table[q + (i + 1) * ldtable];
 
-		if (y_i_q <= __impf_SPLX_PIVLEV_ZERO__)
+		if (y_i_q <= __impf_CTR_SPLX_PIVLEV_ZERO__)
 			continue;
 		else {
 			x_iq = y_i_0 / y_i_q;
@@ -109,7 +109,7 @@ static int simplex_dantzig_enter_rule(const double *table, const int *basis, con
 static int simplex_bland_enter_rule(const double *table, const int *basis, const int m, const int n)
 {
 	int j;
-	double epsilon = __impf_SPLX_BLAND_EPS__;
+	double epsilon = __impf_CTR_SPLX_BLAND_EPS__;
 BLAND_BEGIN:
 	for (j = 0; j < n; j++) {
 		if (!is_in_arri(j, basis, m)) {
@@ -117,7 +117,7 @@ BLAND_BEGIN:
 				return j;
 		}
 	}
-	if (epsilon >= __impf_SPLX_BLAND_EPS_MIN__) {
+	if (epsilon >= __impf_CTR_SPLX_BLAND_EPS_MIN__) {
 		epsilon /= 10.;
 		goto BLAND_BEGIN;
 	} else
@@ -236,7 +236,7 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 			degen_iter = 0;
 		old_value = table[n];
 
-		if (phase1 && table[n] < -__impf_SPLX_PHASE_1_NNVAL__) {
+		if (phase1 && table[n] < -__impf_CHC_SPLX_PHASE_1_NNVAL__) {
 #ifdef IMPF_MODE_DEV
 			printf("NEGATIVE VALUE IN PHASE 1\n");
 #ifdef IMPF_MODE_DEBUG
@@ -525,7 +525,7 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 		*code = impf_ExceedIterLimit;
 		goto END;
 	case 1:
-		if (table[ncol - 1] > __impf_SPLX_FEASIBLE__) {
+		if (table[ncol - 1] > __impf_CHC_SPLX_FEASIBLE__) {
 #ifdef IMPF_MODE_DEV
 			printf("value = %e\n", table[ncol - 1]);
 #endif

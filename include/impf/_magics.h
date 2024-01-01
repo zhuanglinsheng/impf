@@ -23,35 +23,40 @@ extern "C" {
 
 /*******************************************************************************
  * Magic numbers uses in simplex algorithm
+ *
+ * Note: The following magics can be grouped to three types:
+ * 	0. IDF, identifier
+ *	1. CTR, controller
+ *	2. CHC, checker
+ * Identifier will not be directly used in algorithm
+ * Controller affects the algorithm iterations
+ * Checker only do some validity checks, not affecting the iterations
  ******************************************************************************/
 
-/* All `beta`-s less than this value is taken as zero in simplex tabular */
-#define __impf_SPLX_ZEROS_BETA__        1e-12
+/* Identifier of non-zero beta */
+#define __impf_IDF_SPLX_ZEROS_BETA__        1e-9
 
-/* Identifier of reasonable negative zero to be rounded */
-#define __impf_SPLX_RHS_NZERO__         1e-9
+/* Identifier of cummulated error */
+#define __impf_IDF_SPLX_CUM_ERR__           1e-5
 
-/* Identifier of the general checking "LP is optimal" */
-#define __impf_SPLX_OPTIMAL__           1e-9
+/* Checker of the general checking "LP is optimal" */
+#define __impf_CTR_SPLX_OPTIMAL__           __impf_IDF_SPLX_ZEROS_BETA__
 
-/* Identifier of the checking "LP is feasible"  */
-#define __impf_SPLX_FEASIBLE__          1e-5
+/* Checker of the checking "LP is feasible"  */
+#define __impf_CHC_SPLX_FEASIBLE__          __impf_IDF_SPLX_CUM_ERR__
 
-/* Identifier of the checking "LP is degenerated" */
-#define __impf_SPLX_DEGEN__             1e-10
+/* Checker of the checking "LP is degenerated" */
+#define __impf_CHC_SPLX_DEGEN__             1e-10
 
-/* Identifier of the checking "RHS of simplex table is nonnegative" */
-#define __impf_SPLX_RHS_ZEROS__         __impf_SPLX_RHS_NZERO__
+/* Checker of the checking "the value of phase 1 simplex is nonnegative" */
+#define __impf_CHC_SPLX_PHASE_1_NNVAL__     __impf_IDF_SPLX_CUM_ERR__
 
-/* Identifier of the checking "the value of phase 1 simplex is nonnegative" */
-#define __impf_SPLX_PHASE_1_NNVAL__     1e-5
+/* Controller for pivot leaving rule */
+#define __impf_CTR_SPLX_PIVLEV_ZERO__       1e-15
 
-/* Pivot leaving rule */
-#define __impf_SPLX_PIVLEV_ZERO__       1e-9
-
-/* Bland's rule */
-#define __impf_SPLX_BLAND_EPS__         5e-4
-#define __impf_SPLX_BLAND_EPS_MIN__     __impf_SPLX_ZEROS_BETA__
+/* Controllers for Bland's rule */
+#define __impf_CTR_SPLX_BLAND_EPS__         1e-6
+#define __impf_CTR_SPLX_BLAND_EPS_MIN__     __impf_IDF_SPLX_ZEROS_BETA__
 
 #ifdef __cpluscplus
 }
