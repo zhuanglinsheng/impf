@@ -60,6 +60,8 @@ void impf_prt_arrl(const long *arr, const int len, const int inc);
 void impf_prt_arrd(const double *arr, const int len, const int inc, const int sci);
 void impf_prt_arrld(const long double *arr, const int len, const int inc, const int sci);
 
+void impf_prt_matd(const double *mat, const int ld, const int nrow, const int ncol);
+
 /* developing mode (only for development) */
 #define IMPF_MODE_DEV
 

@@ -143,6 +143,21 @@ void impf_prt_arrld(const long double *arr, const int len, const int inc, const 
 	printf("]");
 }
 
+void impf_prt_matd(const double *mat, const int ld, const int nrow, const int ncol)
+{
+	int i, j;
+
+	for (i = 0; i < nrow; i++) {
+		for (j = 0; j < ncol; j++) {
+			printf("%e", mat[j + i * ld]);
+			if (j < ncol - 1)
+				printf(", ");
+		}
+		if(i < nrow - 1)
+			printf("\n");
+	}
+}
+
 /* Find the maximum absolute value of a row
  */
 long double table_abs_rowmax(const long double *table, const int ldtable,
