@@ -38,7 +38,7 @@ int argmaxabs_arrd(const double *arr, const int len, const int inc)
 	assert(inc >= 1);
 
 	for (i = 0; i < len; i += inc) {
-		ele = arr[i];
+		ele = __impf_ABS__(arr[i]);
 		if (ele > maxv) {
 			maxv = ele;
 			idx = i;
