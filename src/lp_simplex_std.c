@@ -203,7 +203,7 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
  */
 static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *basis,
 			     const int m, const int n, const int nreal,
-			     const char *criteria, const int niter, const int phase1)
+			     const char *criteria, const int niter)
 {
 	double old_value = __impf_INF__;
 	int degen_iter = 0;
@@ -235,17 +235,6 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 		} else
 			degen_iter = 0;
 		old_value = table[n];
-
-		if (phase1 && table[n] < -__impf_CHC_SPLX_PHASE_1_NNVAL__) {
-#ifdef IMPF_MODE_DEV
-			printf("NEGATIVE VALUE IN PHASE 1\n");
-#ifdef IMPF_MODE_DEBUG
-			printf("[%u] value = %f\n", *epoch, table[n]);
-			printf("optimal = %u\n", is_simplex_optimal(table, n));
-#endif
-#endif
-			return 9;
-		}
 	}
 	return 0;
 }
@@ -523,7 +512,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, enum 
 	simplex_fill_artiflp_basis(*basis, *constypes, m, n, nslack);
 	simplex_fill_artiflp_nrcost(*table, *ldtable, *constypes, m, ncol);
 
-	switch (simplex_pivot_bsc(epoch, *table, *ldtable, *basis, m, *nvar, n + nslack, criteria, niter, 1)) {
+	switch (simplex_pivot_bsc(epoch, *table, *ldtable, *basis, m, *nvar, n + nslack, criteria, niter)) {
 	case 0:
 		*code = impf_ExceedIterLimit;
 		goto END;
@@ -557,7 +546,7 @@ static int simplex_phase_2_usul(double *table, int ldtable, int *basis, enum imp
 				int *epoch, enum impf_ErrorCode *code, const int m, const int n,
 				const int nvar, const char *criteria, const int niter)
 {
-	switch (simplex_pivot_bsc(epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter, 0)) {
+	switch (simplex_pivot_bsc(epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter)) {
 	case 0:
 		*code = impf_ExceedIterLimit;
 		goto END;
