@@ -160,21 +160,14 @@ static void simplex_pivot_core(double *table, const int ldtable,
 
 /* Pivot starting from a basic representation for one round
  *
- * Parameter:
- *	table		double array of length m * (n + 1)
- *	ldtable		leading dimension of table
- *	basis		int array of length m
- *	m		number of constraints
- *	n		number of variables
- *
  * Return:
  *	0: current BFS is NOT optimal
  *	1: current BSF is optimal
  *	2: LP is unbounded
  *	9: numerical precision error
  */
-int impf_lp_simplex_pivot_on(double *table, const int ldtable, int *basis,
-			     const int m, const int n, const char *criteria)
+static int simplex_pivot_on(double *table, const int ldtable, int *basis,
+			    const int m, const int n, const char *criteria)
 {
 	int bounded;
 	int q, p;
@@ -221,7 +214,7 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 
 	while (*epoch < niter) {
 		(*epoch)++;
-		switch (impf_lp_simplex_pivot_on(table, ldtable, basis, m, n, criteria)) {
+		switch (simplex_pivot_on(table, ldtable, basis, m, n, criteria)) {
 		case 0:
 			break;
 		case 1:
