@@ -116,24 +116,6 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 			const int m, const int n, const char *criteria, const int niter,
 			double *x, double *value, enum impf_ErrorCode *code);
 
-/* Simplex pivoting from a basic representation for one round
- *
- * Parameter:
- *	table		double array of length m * (n + 1)
- *	ldtable		leading dimension of table
- *	basis		int array of length m
- *	m		number of constraints
- *	n		number of variables
- *
- * Return
- *	0: current BFS is NOT optimal
- *	1: current BSF is optimal
- *	2: LP is unbounded
- *	9: numerical precision error
- */
-int impf_lp_simplex_pivot_on(double *table, const int ldtable, int *basis,
-			     const int m, const int n, const char *criteria);
-
 /*******************************************************************************
  * Optimization of "lp-interior-point-family"
  ******************************************************************************/
