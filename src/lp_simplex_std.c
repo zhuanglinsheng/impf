@@ -432,8 +432,20 @@ static void simplex_fill_artiflp_basis(int *basis, const enum impf_ConstraintTyp
 	}
 }
 
-static void doubleransf_artificial_basis(double *table, int ldtable, int *basis,
-				const int m, const int nreal, int nvar)
+static void simplex_fill_artiflp_nrcost(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
+					const int m, const int ncol)
+{
+	int i, rowi;
+
+	for (i = 0; i < m; i++) {
+		if (impf_LE == constypes[i])
+			continue;
+		rowi = (i + 1) * ldtable;
+		impf_linalg_daxpy(ncol, 1, table + rowi, 1, table, 1);
+	}
+}
+
+static void transf_artif_basis(double *table, int ldtable, int *basis, const int m, const int nreal, int nvar)
 {
 	int i, j, q = nvar;
 	double ele, maxv = __impf_NINF__;
@@ -458,84 +470,72 @@ static void doubleransf_artificial_basis(double *table, int ldtable, int *basis,
 		simplex_pivot_core(table, ldtable, m, nvar, i, q, 1, 1, 0);
 		basis[i] = q;
 #ifdef IMPF_MODE_DEV
-		printf("in 'doubleransf_artificial_basis'\n");
+		printf("in 'transf_artif_basis'\n");
 		printf("switch %i <----> %i\n", i, q);
 #endif
 		q = nvar;
 	}
 }
 
-static void simplex_fill_artiflp_nrcost(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
-					const int m, const int ncol)
+static void delete_artif_cols(double *table, const int ldtable, const int m, const int nreal, const int nartif)
 {
-	int i, rowi;
+	if (nartif > 0) {  /* Delete artificial columns */
+		int i, rowi;
 
-	for (i = 0; i < m; i++) {
-		if (impf_LE == constypes[i])
-			continue;
-		rowi = (i + 1) * ldtable;
-		impf_linalg_daxpy(ncol, 1, table + rowi, 1, table, 1);
+		for (i = 0; i < m + 1; i++) {
+			rowi = i * ldtable;
+			table[nreal + rowi] = table[nreal + nartif + rowi];
+		}
 	}
 }
 
-int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstraint *constraints,
-			const int m, const int n, const char *criteria, const int niter,
-			double *x, double *value, enum impf_ErrorCode *code)
+/* Phase 1: get a BFS for the original problem
+ *
+ * Work:
+ * 	1. malloc for table, basis, constypes
+ * 	2. form a basic feasible solution (BSF)
+ * 	3. assign ldtable and nvar, the number of vars in BSF
+ */
+static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, enum impf_ConstraintType **constypes,
+				int *nvar, int *epoch, enum impf_ErrorCode *code,
+				const struct impf_LinearConstraint *constraints,
+				const int m, const int n, const char *criteria, const int niter)
 {
-	int i, j;
-	int nrow, ncol, ldtable;  /* simplex table size */
-	int nslack, nartif, nvar;
-	double *table;
-	int *basis;
-	enum impf_ConstraintType *constypes;
-	int epoch = 0;
-
-	assert(objective != NULL);
-	assert(constraints != NULL);
-	assert(x != NULL);
-	assert(value != NULL);
-	assert(code != NULL);
+	int nrow, ncol;
+	int nslack, nartif;
 
 	simplex_table_size(constraints, m, n, &nrow, &ncol);
-	ldtable = ncol;  /* leading dimension of table in memory */
-	if (simplex_create_buffer(&table, &basis, &constypes, m, nrow, ldtable) == EXIT_FAILURE) {
+	*ldtable = ncol;  /* leading dimension of table in memory */
+	if (simplex_create_buffer(table, basis, constypes, m, nrow, *ldtable) == EXIT_FAILURE) {
 		*code = impf_MemoryAllocError;
 		return EXIT_FAILURE;
 	}
-	simplex_fill_constypes(constraints, constypes, m);
-	simplex_fill_conscoefs(table, ldtable, constraints, nrow, ncol, m, n);
 
-	/*
-	 * Phase 1: Solve the artificial problem
-	 */
-	nslack = simplex_add_slack(table, ldtable, constypes, m, n);
-	nartif = simplex_add_artif(table, ldtable, constypes, m, n, nslack);
-	nvar = n + nslack + nartif;
-	if (m > nvar) {
+	simplex_fill_constypes(constraints, *constypes, m);
+	simplex_fill_conscoefs(*table, *ldtable, constraints, nrow, ncol, m, n);
+	nslack = simplex_add_slack(*table, *ldtable, *constypes, m, n);
+	nartif = simplex_add_artif(*table, *ldtable, *constypes, m, n, nslack);
+	*nvar = n + nslack + nartif;  /* will be recovered to `n + nslack` upon success */
+	if (m > (*nvar)) {
 		*code = impf_OverDetermination;
 		goto END;
 	}
-	simplex_fill_artiflp_basis(basis, constypes, m, n, nslack);
-	simplex_fill_artiflp_nrcost(table, ldtable, constypes, m, ncol);
-#ifdef IMPF_MODE_DEV
-	printf("Phase 1:\n");
-#endif
-	switch (simplex_pivot_bsc(&epoch, table, ldtable, basis, m, nvar, n + nslack, criteria, niter, 1)) {
+	simplex_fill_artiflp_basis(*basis, *constypes, m, n, nslack);
+	simplex_fill_artiflp_nrcost(*table, *ldtable, *constypes, m, ncol);
+
+	switch (simplex_pivot_bsc(epoch, *table, *ldtable, *basis, m, *nvar, n + nslack, criteria, niter, 1)) {
 	case 0:
 		*code = impf_ExceedIterLimit;
 		goto END;
 	case 1:
-		if (table[ncol - 1] > __impf_CHC_SPLX_FEASIBLE__) {
-#ifdef IMPF_MODE_DEV
-			printf("value = %e\n", table[ncol - 1]);
-#endif
+		if ((*table)[ncol - 1] > __impf_CHC_SPLX_FEASIBLE__) {
 			*code = impf_Infeasibility;
 			goto END;
 		}
-#ifdef IMPF_MODE_DEV
-		printf("Phase 1 Done.\n");
-#endif
-		break;
+		transf_artif_basis(*table, *ldtable, *basis, m, n + nslack, *nvar);
+		delete_artif_cols(*table, *ldtable, m, n + nslack, nartif);
+		*nvar = n + nslack;
+		return EXIT_SUCCESS;
 	case 2:
 		*code = impf_PrecisionError;
 		goto END;
@@ -546,46 +546,22 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 		*code = impf_PrecisionError;
 		goto END;
 	}
+END:
+	simplex_free_buffer(*table, *basis, *constypes);
+	return EXIT_FAILURE;
+}
 
-	/*
-	 * Phase 2: Solve the original problem
-	 */
-	doubleransf_artificial_basis(table, ldtable, basis, m, n + nslack, nvar);
-	for (j = 0; j < n; j++)  /* Fill in original objective coefficients */
-		table[j] = -objective[j];
-	if (nartif > 0) {  /* Delete artificial columns */
-		for (i = 0; i < nrow; i++) {
-			int rowi = i * ldtable;
-
-			table[n + nslack + rowi] = table[ncol - 1 + rowi];
-		}
-	}
-	nvar = n + nslack;
-	ncol = nvar + 1;
-	for (i = 0; i < m; i++) {  /* row_0 = row_0 - ratio * row_{i+1} */
-		int rowi = (i + 1) * ldtable;
-		double ratio = -table[basis[i]];
-
-		impf_linalg_daxpy(ncol, ratio, table + rowi, 1, table, 1);
-	}
-#ifdef IMPF_MODE_DEV
-	printf("Phase 2:\n");
-#endif
-	switch (simplex_pivot_bsc(&epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter, 0)) {
+/* Phase 2: Solve the original problem
+ */
+static int simplex_phase_2_usul(double *table, int ldtable, int *basis, enum impf_ConstraintType *constypes,
+				int *epoch, enum impf_ErrorCode *code, const int m, const int n,
+				const int nvar, const char *criteria, const int niter)
+{
+	switch (simplex_pivot_bsc(epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter, 0)) {
 	case 0:
 		*code = impf_ExceedIterLimit;
 		goto END;
 	case 1:
-#ifdef IMPF_MODE_DEV
-		printf("Phase 2 Done.\n");
-#endif
-		*value = table[nvar];
-		memset(x, 0., n * sizeof(double));
-		for (i = 0; i < m; i++) {
-			if (basis[i] < n)
-				x[basis[i]] = table[nvar + (i + 1) * ldtable];
-		}
-		simplex_free_buffer(table, basis, constypes);
 		*code = impf_Success;
 		return EXIT_SUCCESS;
 	case 2:
@@ -601,4 +577,60 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 END:
 	simplex_free_buffer(table, basis, constypes);
 	return EXIT_FAILURE;  /* error code already updated */
+}
+
+int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstraint *constraints,
+			const int m, const int n, const char *criteria, const int niter,
+			double *x, double *value, enum impf_ErrorCode *code)
+{
+	int i, j;
+	int ldtable;
+	int nvar;
+	int epoch = 0;
+	int *basis = NULL;
+	double *table = NULL;
+	enum impf_ConstraintType *constypes = NULL;
+
+	assert(objective != NULL);
+	assert(constraints != NULL);
+	assert(x != NULL);
+	assert(value != NULL);
+	assert(code != NULL);
+
+#ifdef IMPF_MODE_DEV
+	printf("Phase 1 Begin:\n");
+#endif
+	if (simplex_phase_1_usul(&table, &ldtable, &basis, &constypes, &nvar, &epoch, code,
+				 constraints, m, n, criteria, niter) == EXIT_FAILURE)
+		return EXIT_FAILURE;
+#ifdef IMPF_MODE_DEV
+	printf("Phase 1 Done.\n");
+#endif
+
+#ifdef IMPF_MODE_DEV
+	printf("Phase 2 Begin:\n");
+#endif
+	for (j = 0; j < n; j++)  /* Fill in original objective coefficients */
+		table[j] = -objective[j];
+	for (i = 0; i < m; i++) {  /* row_0 = row_0 - ratio * row_{i+1} */
+		int rowi = (i + 1) * ldtable;
+		double ratio = -table[basis[i]];
+
+		impf_linalg_daxpy(nvar + 1, ratio, table + rowi, 1, table, 1);
+	}
+	if (simplex_phase_2_usul(table, ldtable, basis, constypes, &epoch, code,
+				 m, n, nvar, criteria, niter) == EXIT_FAILURE)
+		return EXIT_FAILURE;
+#ifdef IMPF_MODE_DEV
+	printf("Phase 2 Done.\n");
+#endif
+
+	*value = table[nvar];
+	memset(x, 0., n * sizeof(double));
+	for (i = 0; i < m; i++) {
+		if (basis[i] < n)
+			x[basis[i]] = table[nvar + (i + 1) * ldtable];
+	}
+	simplex_free_buffer(table, basis, constypes);
+	return EXIT_SUCCESS;
 }
