@@ -13,3 +13,13 @@ void impf_linalg_dscal(const int n, const double x, double *arr, const int inc)
 	for (i = 0; i < n; i += inc)
 		arr[i] *= x;
 }
+
+void impf_linalg_ldscal(const int n, const long double x, long double *arr, const int inc)
+{
+	int i;
+
+	assert(arr != NULL);
+
+	for (i = 0; i < n; i += inc)
+		arr[i] *= x;
+}

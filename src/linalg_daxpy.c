@@ -17,3 +17,18 @@ void impf_linalg_daxpy(const int n, const double a, const double *x, const int i
 		j += incx;
 	}
 }
+
+void impf_linalg_ldaxpy(const int n, const long double a, const long double *x, const int incx,
+			long double *y, const int incy)
+{
+	int i = 0, j = 0;
+
+	assert(x != NULL);
+	assert(y != NULL);
+
+	while (i < n && j < n) {
+		y[i] += a * x[j];
+		i += incy;
+		j += incx;
+	}
+}

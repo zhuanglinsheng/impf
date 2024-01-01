@@ -17,6 +17,9 @@ extern "C" {
 
 void impf_linalg_dscal(const int n, const double x, double *arr, const int inc);
 void impf_linalg_daxpy(const int n, const double a, const double *x, const int incx, double *y, const int incy);
+void impf_linalg_ldscal(const int n, const long double x, long double *arr, const int inc);
+void impf_linalg_ldaxpy(const int n, const long double a, const long double *x, const int incx,
+			long double *y, const int incy);
 
 /*******************************************************************************
  * Linear algebra of "dgesl-family"
