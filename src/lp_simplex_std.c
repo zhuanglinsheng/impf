@@ -31,11 +31,11 @@ static int is_basis_valid(const int *basis, const int m, const int n)
 /* In simplex iteration, check whether value is improved.
  *
  * Return:
- *     0    not degenerated
- *     1    degenerated but optimal already
- *     2    degenerated
+ *     0    not circled
+ *     1    circled but optimal already
+ *     2    circled
  */
-static int check_simplex_degeneracy(const double *table, const int n, const double old_value)
+static int check_simplex_circled(const double *table, const int n, const double old_value)
 {
 	if (old_value <= table[n] + __impf_CHC_SPLX_DEGEN__) {
 		if (is_simplex_optimal(table, n))
@@ -198,7 +198,7 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
  *	0: current BFS is NOT optimal
  *	1: current BSF is optimal
  *	2: LP is unbounded
- *	3: LP is degenerated
+ *	3: LP is circled more than accepted times (indicating for degeneracy)
  *	9: numerical precision error
  */
 static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *basis,
@@ -228,7 +228,7 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 		printf("[%u] value = %f - ", *epoch, table[n]);
 		printf("degen-iter = %u\n\n", degen_iter);
 #endif
-		if (check_simplex_degeneracy(table, n, old_value) == 2) {
+		if (check_simplex_circled(table, n, old_value) == 2) {
 			degen_iter++;
 			if (degen_iter > 50)
 				return 3;
