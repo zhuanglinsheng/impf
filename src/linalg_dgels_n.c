@@ -27,7 +27,7 @@ static int select_major(const double *row, const int n, const int *ipvt, const i
 }
 
 int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int lda, const double *b, const int ldb,
-			int *ipvt, double *x, double *buffer, enum impf_ErrorCode *code)
+			int *ipvt, double *x, double *buffer, int *code)
 {
 	int i, j;
 	int ncol = n + nrhs;

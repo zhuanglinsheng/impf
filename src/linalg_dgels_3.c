@@ -8,7 +8,7 @@
 int impf_linalg_dgels_3(const double A11, const double A12, const double A13,
 			const double A21, const double A22, const double A23,
 			const double A31, const double A32, const double A33,
-			const double b1, const double b2, const double b3, double *x, enum impf_ErrorCode *code)
+			const double b1, const double b2, const double b3, double *x, int *code)
 {
 	double detA, detA1, detA2, detA3;
 	double tmp1, tmp2, tmp3;

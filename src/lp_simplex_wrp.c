@@ -5,7 +5,7 @@
 #include <impf/lp.h>
 
 int impf_lp_simplex_wrp(const struct impf_Model_LP *model, const char *criteria, const int niter,
-			double *x, double *value, enum impf_ErrorCode *code)
+			double *x, double *value, int *code)
 {
 	int m = model->m;
 	int n = model->n;

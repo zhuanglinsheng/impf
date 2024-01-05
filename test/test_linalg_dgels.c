@@ -14,7 +14,7 @@ int main(void)
 	};
 	double b[] = {5., 8., 9.};
 	double x1[3], x2[3];
-	enum impf_ErrorCode code;
+	int code;
 	int ipvt[3];
 	double buffer[100];
 	int state;

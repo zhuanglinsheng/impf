@@ -19,18 +19,16 @@ extern "C" {
 #define __impf_INF__ (1. / 0.)
 #define __impf_NINF__ (-1. / 0.)
 
-enum impf_ErrorCode {
-	impf_Success,			/* 0 */
-	impf_MemoryAllocError,		/* 1 */
-	impf_CondUnsatisfied,		/* 2 */
-	impf_ExceedIterLimit,		/* 3 */
-	impf_Singularity,		/* 4 */
-	impf_OverDetermination,		/* 5 */
-	impf_Unboundedness,		/* 6 */
-	impf_Infeasibility,		/* 7 */
-	impf_Degeneracy,		/* 8 */
-	impf_PrecisionError		/* 9 */
-};
+#define impf_Success			0
+#define impf_MemoryAllocError		1
+#define impf_CondUnsatisfied		2
+#define impf_ExceedIterLimit		3
+#define impf_Singularity		4
+#define impf_OverDetermination		5
+#define impf_Unboundedness		6
+#define impf_Infeasibility		7
+#define impf_Degeneracy			8
+#define impf_PrecisionError		9
 
 /*******************************************************************************
  * Utils of "arri-info-family"

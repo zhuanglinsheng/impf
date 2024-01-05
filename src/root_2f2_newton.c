@@ -7,7 +7,7 @@
 #include <impf/linalg.h>
 
 int impf_root_2f2_newton(double (*f)(const double, const double), double (*g)(const double, const double),
-			 double *x, double *y, enum impf_ErrorCode *code,
+			 double *x, double *y, int *code,
 			 const double tol, const double tolf, const int niter)
 {
 	double jac[4], x1_arr[2];

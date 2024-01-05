@@ -71,7 +71,7 @@ void impf_lp_free(struct impf_Model_LP *model);
 int impf_lp_simplex(const double *objective, const struct impf_LinearConstraint *constraints,
 		    const struct impf_VariableBound *bounds,
 		    const int m, const int n, const char *criteria, const int niter,
-		    double *x, double *value, enum impf_ErrorCode *code);
+		    double *x, double *value, int *code);
 
 /* Simplex algorithm for solving LP of general form
  * (Wrapper of `impf_fmin_lp_simplex_full` by taking `impf_Model_LP` as input)
@@ -85,7 +85,7 @@ int impf_lp_simplex(const double *objective, const struct impf_LinearConstraint 
  * Return: `EXIT_SUCCESS` or `EXIT_FAILURE`
  */
 int impf_lp_simplex_wrp(const struct impf_Model_LP *model, const char *criteria, const int niter,
-			double *x, double *value, enum impf_ErrorCode *code);
+			double *x, double *value, int *code);
 
 /* Simplex algorithm for solving LP of standard form
  *
@@ -114,7 +114,7 @@ int impf_lp_simplex_wrp(const struct impf_Model_LP *model, const char *criteria,
  */
 int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstraint *constraints,
 			const int m, const int n, const char *criteria, const int niter,
-			double *x, double *value, enum impf_ErrorCode *code);
+			double *x, double *value, int *code);
 
 /*******************************************************************************
  * Optimization of "lp-interior-point-family"

@@ -6,7 +6,7 @@
 #include <impf/linalg.h>
 
 int impf_linalg_dgels_2(const double A11, const double A12, const double A21, const double A22,
-			const double b1, const double b2, double *x, enum impf_ErrorCode *code)
+			const double b1, const double b2, double *x, int *code)
 {
 	double det;
 

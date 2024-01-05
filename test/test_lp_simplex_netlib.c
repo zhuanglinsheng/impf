@@ -13,7 +13,7 @@ void netlib_bm(const char *bm, const int n, const double fval)
 	double usec = 0, msec = 0, sec = 0;
 
 	double *x, value;
-	enum impf_ErrorCode code;
+	int code;
 	int state;
 	struct impf_Model_LP *model = NULL;
 	char file[80];

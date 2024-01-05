@@ -23,7 +23,7 @@ int main(void)
 {
 	/* call simplex subroutine that should be degenerated */
 	double x[n], value;
-	enum impf_ErrorCode code;
+	int code;
 	int state = impf_lp_simplex(obj, constraints, NULL, m, n, "bland", 1000, x, &value, &code);
 
 	printf("Error code = %u\n", code);

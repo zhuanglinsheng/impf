@@ -26,18 +26,18 @@ void impf_linalg_ldaxpy(const int n, const long double a, const long double *x, 
  ******************************************************************************/
 
 int impf_linalg_dgels_2(const double A11, const double A12, const double A21, const double A22,
-			const double b1, const double b2, double * x, enum impf_ErrorCode *code);
+			const double b1, const double b2, double * x, int *code);
 int impf_linalg_dgels_3(const double A11, const double A12, const double A13,
 			const double A21, const double A22, const double A23,
 			const double A31, const double A32, const double A33,
 			const double b1, const double b2, const double b3,
-			double *x, enum impf_ErrorCode *code);
+			double *x, int *code);
 /* Note: `buffer` is a double array, length = n * (n + nrhs) */
 int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int lda, const double *b,
-			const int ldb, int *ipvt, double *x, double *buffer, enum impf_ErrorCode *code);
+			const int ldb, int *ipvt, double *x, double *buffer, int *code);
 /* wrapper of `impf_linalg_dgels_n` by using malloc */
 int impf_linalg_dgels_L(const int n, const int nrhs, const double *a, const int lda, const double *b,
-			const int ldb, int *ipvt, double *x, enum impf_ErrorCode *code);
+			const int ldb, int *ipvt, double *x, int *code);
 
 #ifdef __cpluscplus
 }

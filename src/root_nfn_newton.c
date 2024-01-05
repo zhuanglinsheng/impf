@@ -85,7 +85,7 @@ static void diff_3f3(void (*f)(const double*, double*), double *x, double * Jac)
 }
 
 int impf_root_nfn_newton(void (*f)(const double*, double*), double *x, const int n,
-			 double *buffer, int *ipvt, enum impf_ErrorCode *code,
+			 double *buffer, int *ipvt, int *code,
 			 const double tol, const double tolf, const int niter)
 {
 	double *Jac, *x1_arr, *fx, *calc_buffer;

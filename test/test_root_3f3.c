@@ -26,7 +26,7 @@ int main(void)
 	double y = 0.5;
 	double z = 0.5;
 
-	enum impf_ErrorCode code;
+	int code;
 	int state = impf_root_3f3_newton(f, g, h, &x, &y, &z, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);

@@ -9,7 +9,7 @@
 int impf_root_3f3_newton(double (*f)(const double, const double, const double),
 			 double (*g)(const double, const double, const double),
 			 double (*h)(const double, const double, const double),
-			 double *x, double *y, double *z, enum impf_ErrorCode *code,
+			 double *x, double *y, double *z, int *code,
 			 const double tol, const double tolf, const int niter)
 {
 	double jac[9], x1_arr[3];

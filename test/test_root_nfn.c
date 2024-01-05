@@ -22,7 +22,7 @@ int main(void)
 	double fx[3];
 	double buffer[3 * (2 * 3 + 3)]; /* buffer length = n(2n + 3) */
 	int ipvt[3];
-	enum impf_ErrorCode code;
+	int code;
 	int state = impf_root_nfn_newton(f, x, 3, buffer, ipvt, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);

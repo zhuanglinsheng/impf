@@ -195,7 +195,7 @@ static void retreive_ori_lp_sol(const struct impf_VariableBound *bounds, const i
 int impf_lp_simplex(const double *objective, const struct impf_LinearConstraint *constraints,
 		    const struct impf_VariableBound *bounds,
 		    const int m, const int n, const char *criteria, const int niter,
-		    double *x, double *value, enum impf_ErrorCode *code)
+		    double *x, double *value, int *code)
 {
 	int _M, _N;
 	double *obj2, *x2, *coef2;

@@ -18,7 +18,7 @@ double f(const double x)
 int main(void)
 {
 	double x, y;
-	enum impf_ErrorCode code;
+	int code;
 	int state;
 
 	x = -b / (2. * a);

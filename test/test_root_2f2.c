@@ -21,7 +21,7 @@ int main(void)
 	double x = 1.5;
 	double y = 0.5;
 
-	enum impf_ErrorCode code;
+	int code;
 	int state = impf_root_2f2_newton(f, g, &x, &y, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);

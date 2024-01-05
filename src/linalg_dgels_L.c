@@ -5,7 +5,7 @@
 #include <impf/linalg.h>
 
 int impf_linalg_dgels_L(const int n, const int nrhs, const double *a, const int lda, const double *b, const int ldb,
-			int *ipvt, double *x, enum impf_ErrorCode *code)
+			int *ipvt, double *x, int *code)
 {
 	double *buffer = malloc(n * (n + nrhs) * sizeof(double));
 

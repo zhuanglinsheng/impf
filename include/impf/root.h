@@ -21,21 +21,21 @@ extern "C" {
  * 	1. `x` and `y` are initial boundaries of solution
  *	2. the initial boundaries `x` and `y` shall satisfy f(x) * f(y) < 0
  */
-int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, enum impf_ErrorCode *code,
+int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, int *code,
 			    const double tol, const double tolf, const int niter);
 
 /* Root finding: 1-variant real function (secant method)
  *
  * Note: `x` and `y` are initial guesses of solution
  */
-int impf_root_1f1_secant(double (*f)(const double), double *x, double *y, enum impf_ErrorCode *code,
+int impf_root_1f1_secant(double (*f)(const double), double *x, double *y, int *code,
 			 const double tol, const double tolf, const int niter);
 
 /* Root finding: 1-variant real function (newton's method)
  *
  * Note: `x` is the initial guess of solution
  */
-int impf_root_1f1_newton(double (*f)(const double), double *x, enum impf_ErrorCode *code,
+int impf_root_1f1_newton(double (*f)(const double), double *x, int *code,
 			 const double tol, const double tolf, const int niter);
 
 /*******************************************************************************
@@ -48,7 +48,7 @@ int impf_root_1f1_newton(double (*f)(const double), double *x, enum impf_ErrorCo
  */
 int impf_root_2f2_newton(double (*f)(const double, const double),
 			 double (*g)(const double, const double),
-			 double *x, double *y, enum impf_ErrorCode *code,
+			 double *x, double *y, int *code,
 			 const double tol, const double tolf, const int niter);
 
 /* Root finding: three 3-variant real functions (newton's method)
@@ -58,7 +58,7 @@ int impf_root_2f2_newton(double (*f)(const double, const double),
 int impf_root_3f3_newton(double (*f)(const double, const double, const double),
 			 double (*g)(const double, const double, const double),
 			 double (*h)(const double, const double, const double),
-			 double *x, double *y, double *z, enum impf_ErrorCode *code,
+			 double *x, double *y, double *z, int *code,
 			 const double tol, const double tolf, const int niter);
 
 /* Root finding: n-variant real function that returns n values (newton's method)
@@ -68,7 +68,7 @@ int impf_root_3f3_newton(double (*f)(const double, const double, const double),
  *       (3) `pivt` is an int array, length = n
  */
 int impf_root_nfn_newton(void (*f)(const double*, double*), double *x, const int n,
-			 double *buffer, int *pivt, enum impf_ErrorCode *code,
+			 double *buffer, int *pivt, int *code,
 			 const double tol, const double tolf, const int niter);
 
 #ifdef __cpluscplus

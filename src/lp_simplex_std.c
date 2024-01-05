@@ -486,7 +486,7 @@ static void delete_artif_cols(double *table, const int ldtable, const int m, con
  * 	3. assign ldtable and nvar, the number of vars in BSF
  */
 static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, enum impf_ConstraintType **constypes,
-				int *nvar, int *epoch, enum impf_ErrorCode *code,
+				int *nvar, int *epoch, int *code,
 				const struct impf_LinearConstraint *constraints,
 				const int m, const int n, const char *criteria, const int niter)
 {
@@ -543,7 +543,7 @@ END:
 /* Phase 2: Solve the original problem
  */
 static int simplex_phase_2_usul(double *table, int ldtable, int *basis, enum impf_ConstraintType *constypes,
-				int *epoch, enum impf_ErrorCode *code, const int m, const int n,
+				int *epoch, int *code, const int m, const int n,
 				const int nvar, const char *criteria, const int niter)
 {
 	switch (simplex_pivot_bsc(epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter)) {
@@ -570,7 +570,7 @@ END:
 
 int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstraint *constraints,
 			const int m, const int n, const char *criteria, const int niter,
-			double *x, double *value, enum impf_ErrorCode *code)
+			double *x, double *value, int *code)
 {
 	int i, j;
 	int ldtable;

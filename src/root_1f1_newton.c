@@ -6,7 +6,7 @@
 #include <impf/diff.h>
 #include <impf/root.h>
 
-int impf_root_1f1_newton(double (*f)(const double), double *x, enum impf_ErrorCode *code,
+int impf_root_1f1_newton(double (*f)(const double), double *x, int *code,
 			 const double tol, const double tolf, const int niter)
 {
 	double x1, grd, fx;

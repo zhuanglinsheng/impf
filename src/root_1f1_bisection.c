@@ -4,7 +4,7 @@
  */
 #include <impf/root.h>
 
-int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, enum impf_ErrorCode *code,
+int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, int *code,
 			    const double tol, const double tolf, const int niter)
 {
 	double fx, fy, fz, z;
