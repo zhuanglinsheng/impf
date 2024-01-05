@@ -61,8 +61,8 @@ static struct impf_Model_LP *create_model(const int m, const int n)
 		memset(bounds[i].name, '\0', 16);
 		bounds[i].lb = 0;
 		bounds[i].ub = __impf_INF__;
-		bounds[i].b_type = impf_LO;
-		bounds[i].v_type = impf_REAL;
+		bounds[i].b_type = impf_BOUND_T_LO;
+		bounds[i].v_type = impf_VAR_T_REAL;
 	}
 	return model;
 }
@@ -243,17 +243,17 @@ LOOP:
 			break;
 		case 'L':
 			memcpy(model->constraints[ncons].name, line + 4, 8);
-			model->constraints[ncons].type = impf_LE;
+			model->constraints[ncons].type = impf_CONS_T_LE;
 			ncons++;
 			break;
 		case 'G':
 			memcpy(model->constraints[ncons].name, line + 4, 8);
-			model->constraints[ncons].type = impf_GE;
+			model->constraints[ncons].type = impf_CONS_T_GE;
 			ncons++;
 			break;
 		case 'E':
 			memcpy(model->constraints[ncons].name, line + 4, 8);
-			model->constraints[ncons].type = impf_EQ;
+			model->constraints[ncons].type = impf_CONS_T_EQ;
 			ncons++;
 			break;
 		default:

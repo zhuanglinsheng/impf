@@ -242,7 +242,7 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 /* To create in heap (need to be released) simplex table, index set of basis
  * and constraint type recorder
  */
-static int simplex_create_buffer(double **table, int **basis, enum impf_ConstraintType **constypes,
+static int simplex_create_buffer(double **table, int **basis, int **constypes,
 				 const int m, const int nrow, const int ncol)
 {
 	*table = NULL;
@@ -257,7 +257,7 @@ static int simplex_create_buffer(double **table, int **basis, enum impf_Constrai
 		free(*table);
 		return EXIT_FAILURE;
 	}
-	*constypes = malloc(m * sizeof(enum impf_ConstraintType));
+	*constypes = malloc(m * sizeof(int));
 	if (*constypes == NULL) {
 		free(*table);
 		free(*basis);
@@ -266,7 +266,7 @@ static int simplex_create_buffer(double **table, int **basis, enum impf_Constrai
 	return EXIT_SUCCESS;
 }
 
-static void simplex_free_buffer(double *table, int *basis, enum impf_ConstraintType *constypes)
+static void simplex_free_buffer(double *table, int *basis, int *constypes)
 {
 	if (table)
 		free(table);
@@ -282,7 +282,7 @@ static void simplex_free_buffer(double *table, int *basis, enum impf_ConstraintT
  * "LE" and "GE" types are transformed respectively
  */
 static void simplex_fill_constypes(const struct impf_LinearConstraint *constraints,
-				   enum impf_ConstraintType *constypes, const int m)
+				   int *constypes, const int m)
 {
 	int i;
 
@@ -293,14 +293,14 @@ static void simplex_fill_constypes(const struct impf_LinearConstraint *constrain
 			constypes[i] = cons->type;
 		else {
 			switch (cons->type) {
-			case impf_EQ:
-				constypes[i] = impf_EQ;
+			case impf_CONS_T_EQ:
+				constypes[i] = impf_CONS_T_EQ;
 				break;
-			case impf_GE:
-				constypes[i] = impf_LE;
+			case impf_CONS_T_GE:
+				constypes[i] = impf_CONS_T_LE;
 				break;
-			case impf_LE:
-				constypes[i] = impf_GE;
+			case impf_CONS_T_LE:
+				constypes[i] = impf_CONS_T_GE;
 				break;
 			}
 		}
@@ -348,9 +348,9 @@ static void simplex_table_size_usul(const struct impf_LinearConstraint *constrai
 	for (i = 0; i < m; i++) {
 		const struct impf_LinearConstraint *cons = constraints + i;
 
-		if (impf_GE == cons->type && cons->rhs >= 0)
+		if (impf_CONS_T_GE == cons->type && cons->rhs >= 0)
 			(*ncol)++;
-		if (impf_LE == cons->type && cons->rhs < 0)
+		if (impf_CONS_T_LE == cons->type && cons->rhs < 0)
 			(*ncol)++;
 	}
 }
@@ -358,17 +358,17 @@ static void simplex_table_size_usul(const struct impf_LinearConstraint *constrai
 /* Add slack variables (GE, LE) to simplex table
  * Return the number of slack variables
  */
-static int simplex_add_slack(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
+static int simplex_add_slack(double *table, const int ldtable, const int *constypes,
 			     const int m, const int n)
 {
 	int i, nslack = 0;
 
 	for (i = 0; i < m; i++) {
-		if (impf_GE == constypes[i]) {
+		if (impf_CONS_T_GE == constypes[i]) {
 			table[n + nslack + (i + 1) * ldtable] = -1.;
 			nslack++;
 		}
-		if (impf_LE == constypes[i]) {
+		if (impf_CONS_T_LE == constypes[i]) {
 			table[n + nslack + (i + 1) * ldtable] = 1.;
 			nslack++;
 		}
@@ -379,13 +379,13 @@ static int simplex_add_slack(double *table, const int ldtable, const enum impf_C
 /* Add artificial variables (GE, EQ) to simplex table
  * Return the number of artificial variables
  */
-static int simplex_add_artif(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
+static int simplex_add_artif(double *table, const int ldtable, const int *constypes,
 			     const int m, const int n, const int nslack)
 {
 	int i, nartif = 0;
 
 	for (i = 0; i < m; i++) {
-		if (impf_LE != constypes[i]) {
+		if (impf_CONS_T_LE != constypes[i]) {
 			table[n + nslack + nartif + (i + 1) * ldtable] =  1.;
 			table[n + nslack + nartif] = -1.;
 			nartif++;
@@ -396,23 +396,23 @@ static int simplex_add_artif(double *table, const int ldtable, const enum impf_C
 
 /* Fill in the basis index set of artificial LP
  */
-static void simplex_fill_artiflp_basis(int *basis, const enum impf_ConstraintType *constypes,
+static void simplex_fill_artiflp_basis(int *basis, const int *constypes,
 				       const int m, const int n, const int nslack)
 {
 	int i, tmp_nbasis = 0, tmp_nslack = 0, tmp_nartif = 0;
 
 	for (i = 0; i < m; i++) {
 		switch (constypes[i]) {
-		case impf_EQ:
+		case impf_CONS_T_EQ:
 			*(basis + tmp_nbasis) = n + nslack + tmp_nartif;
 			tmp_nartif++;
 			break;
-		case impf_GE:
+		case impf_CONS_T_GE:
 			*(basis + tmp_nbasis) = n + nslack + tmp_nartif;
 			tmp_nartif++;
 			tmp_nslack++;
 			break;
-		case impf_LE:
+		case impf_CONS_T_LE:
 			*(basis + tmp_nbasis) = n + tmp_nslack;
 			tmp_nslack++;
 			break;
@@ -421,13 +421,13 @@ static void simplex_fill_artiflp_basis(int *basis, const enum impf_ConstraintTyp
 	}
 }
 
-static void simplex_fill_artiflp_nrcost(double *table, const int ldtable, const enum impf_ConstraintType *constypes,
+static void simplex_fill_artiflp_nrcost(double *table, const int ldtable, const int *constypes,
 					const int m, const int ncol)
 {
 	int i, rowi;
 
 	for (i = 0; i < m; i++) {
-		if (impf_LE == constypes[i])
+		if (impf_CONS_T_LE == constypes[i])
 			continue;
 		rowi = (i + 1) * ldtable;
 		impf_linalg_daxpy(ncol, 1, table + rowi, 1, table, 1);
@@ -485,7 +485,7 @@ static void delete_artif_cols(double *table, const int ldtable, const int m, con
  * 	2. form a basic feasible solution (BSF)
  * 	3. assign ldtable and nvar, the number of vars in BSF
  */
-static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, enum impf_ConstraintType **constypes,
+static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int **constypes,
 				int *nvar, int *epoch, int *code,
 				const struct impf_LinearConstraint *constraints,
 				const int m, const int n, const char *criteria, const int niter)
@@ -542,7 +542,7 @@ END:
 
 /* Phase 2: Solve the original problem
  */
-static int simplex_phase_2_usul(double *table, int ldtable, int *basis, enum impf_ConstraintType *constypes,
+static int simplex_phase_2_usul(double *table, int ldtable, int *basis, int *constypes,
 				int *epoch, int *code, const int m, const int n,
 				const int nvar, const char *criteria, const int niter)
 {
@@ -578,7 +578,7 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 	int epoch = 0;
 	int *basis = NULL;
 	double *table = NULL;
-	enum impf_ConstraintType *constypes = NULL;
+	int *constypes = NULL;
 
 	assert(objective != NULL);
 	assert(constraints != NULL);

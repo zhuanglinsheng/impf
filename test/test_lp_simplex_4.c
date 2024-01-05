@@ -23,12 +23,12 @@ double constraint_1_coef[] = {-3., 1.};
 double constraint_2_coef[] = {-1., -2.};
 
 struct impf_LinearConstraint constraints[] = {
-	{ "", constraint_1_coef,  6., impf_LE },
-	{ "", constraint_2_coef, -4., impf_GE },
+	{ "", constraint_1_coef,  6., impf_CONS_T_LE },
+	{ "", constraint_2_coef, -4., impf_CONS_T_GE },
 };
 struct impf_VariableBound bounds[] = {
-	{ "x0", __impf_NINF__, __impf_INF__, impf_FR, impf_REAL },
-	{ "x1",            -3, __impf_INF__, impf_LO, impf_REAL },
+	{ "x0", __impf_NINF__, __impf_INF__, impf_BOUND_T_FR, impf_VAR_T_REAL },
+	{ "x1",            -3, __impf_INF__, impf_BOUND_T_LO, impf_VAR_T_REAL },
 };
 
 int main(void)

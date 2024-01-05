@@ -67,9 +67,9 @@ static void stdlpf_size(const struct impf_VariableBound *bounds, const int m, co
 	for (j = 0; j < n; j++) {
 		const struct impf_VariableBound *bd = bounds + j;
 
-		if (impf_FR == bd->b_type)
+		if (impf_BOUND_T_FR == bd->b_type)
 			(*_N)++;
-		if (impf_UP == bd->b_type || impf_BS == bd->b_type)
+		if (impf_BOUND_T_UP == bd->b_type || impf_BOUND_T_BS == bd->b_type)
 			(*_M)++;
 	}
 }
@@ -87,11 +87,11 @@ static void lp_transf_0(const double *objective, const struct impf_LinearConstra
 	bd = bounds + j;
 	obj2[*ctr_var] = objective[j];
 
-	if (impf_UP == bd->b_type || impf_BS == bd->b_type) {
+	if (impf_BOUND_T_UP == bd->b_type || impf_BOUND_T_BS == bd->b_type) {
 		idx = m + (*ctr_ubcons);
 		constraints2[idx].coef = coef2 + idx * _N;
 		constraints2[idx].rhs = bd->ub;
-		constraints2[idx].type = impf_LE;
+		constraints2[idx].type = impf_CONS_T_LE;
 		constraints2[idx].coef[*ctr_var] = 1.;
 		(*ctr_ubcons)++;
 	}
@@ -108,7 +108,7 @@ static void lp_transf_1(const double *objective, const struct impf_LinearConstra
 {
 	int i;
 
-	if (impf_FR != (bounds + j)->b_type)
+	if (impf_BOUND_T_FR != (bounds + j)->b_type)
 		return;
 	obj2[*ctr_var] = -objective[j];
 
@@ -126,7 +126,7 @@ static void lp_transf_2(const double *objective, const struct impf_LinearConstra
 	int i;
 	const struct impf_VariableBound *bd = bounds + j;
 
-	if (impf_LO != bd->b_type && impf_BS != bd->b_type)
+	if (impf_BOUND_T_LO != bd->b_type && impf_BOUND_T_BS != bd->b_type)
 		return;
 	*obj_diff += objective[j] * bd->lb;
 
@@ -179,10 +179,10 @@ static void retreive_ori_lp_sol(const struct impf_VariableBound *bounds, const i
 	for (j = 0; j < n; j++) {
 		const struct impf_VariableBound *bd = bounds + j;
 
-		if (impf_FR == bd->b_type) {
+		if (impf_BOUND_T_FR == bd->b_type) {
 			x[j] = x2[ctr_var] - x2[ctr_var + 1];
 			ctr_var++;
-		} else if (impf_LO == bd->b_type || impf_BS == bd->b_type) {
+		} else if (impf_BOUND_T_LO == bd->b_type || impf_BOUND_T_BS == bd->b_type) {
 			x[j] = x2[ctr_var] + bd->lb;
 		} else {
 			x[j] = x2[ctr_var];

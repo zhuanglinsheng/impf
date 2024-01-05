@@ -11,38 +11,32 @@
 extern "C" {
 #endif /* __cplusplus */
 
-enum impf_VariableType {
-	impf_REAL,
-	impf_INTEGER,
-	impf_BINARY
-};
+#define impf_VAR_T_REAL	0
+#define impf_VAR_T_INT	1
+#define impf_VAR_T_BIN	2
 
-enum impf_BoundType {
-	impf_FR,	/* free */
-	impf_UP,	/* upper bounded */
-	impf_LO,	/* lower bounded */
-	impf_BS		/* bounded from both sides */
-};
+#define impf_BOUND_T_FR	0	/* free */
+#define impf_BOUND_T_UP	1	/* upper bounded */
+#define impf_BOUND_T_LO	2	/* lower bounded */
+#define impf_BOUND_T_BS	3	/* bounded from both sides */
 
-enum impf_ConstraintType {
-	impf_EQ,
-	impf_GE,
-	impf_LE
-};
+#define impf_CONS_T_EQ	0
+#define impf_CONS_T_GE	1
+#define impf_CONS_T_LE	2
 
 struct impf_VariableBound {
 	char name[16];
 	double lb;
 	double ub;
-	enum impf_BoundType b_type;
-	enum impf_VariableType v_type;
+	int b_type;
+	int v_type;
 };
 
 struct impf_LinearConstraint {
 	char name[16];
 	double * coef;
 	double rhs;
-	enum impf_ConstraintType type;
+	int type;
 };
 
 #ifdef __cpluscplus

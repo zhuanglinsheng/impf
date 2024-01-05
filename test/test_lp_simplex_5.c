@@ -30,16 +30,16 @@ double constraint_5_coef[] = { -1., -1.   };
 double constraint_6_coef[] = { -1.,  1.   };
 
 struct impf_LinearConstraint constraints[] = {
-	{ "", constraint_1_coef,  2., impf_LE },
-	{ "", constraint_2_coef,  1., impf_LE },
-	{ "", constraint_3_coef,  2., impf_LE },
-	{ "", constraint_4_coef,  1., impf_LE },
-	{ "", constraint_5_coef, -1., impf_LE },
-	{ "", constraint_6_coef,  2., impf_LE }
+	{ "", constraint_1_coef,  2., impf_CONS_T_LE },
+	{ "", constraint_2_coef,  1., impf_CONS_T_LE },
+	{ "", constraint_3_coef,  2., impf_CONS_T_LE },
+	{ "", constraint_4_coef,  1., impf_CONS_T_LE },
+	{ "", constraint_5_coef, -1., impf_CONS_T_LE },
+	{ "", constraint_6_coef,  2., impf_CONS_T_LE }
 };
 struct impf_VariableBound bounds[] = {
-	{ "x", __impf_NINF__, __impf_INF__, impf_FR, impf_REAL },
-	{ "y", __impf_NINF__, __impf_INF__, impf_FR, impf_REAL }
+	{ "x", __impf_NINF__, __impf_INF__, impf_BOUND_T_FR, impf_VAR_T_REAL },
+	{ "y", __impf_NINF__, __impf_INF__, impf_BOUND_T_FR, impf_VAR_T_REAL }
 };
 
 int main(void)

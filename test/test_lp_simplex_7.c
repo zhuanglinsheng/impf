@@ -25,10 +25,10 @@ double constraint_3_coef[] = { 0., -4., -9., 0.};
 double constraint_4_coef[] = { 0.,  0.,  3., 1.};
 
 struct impf_LinearConstraint constraints[] = {
-	{ "", constraint_1_coef,  3., impf_EQ },
-	{ "", constraint_2_coef,  2., impf_EQ },
-	{ "", constraint_3_coef, -5., impf_EQ },
-	{ "", constraint_4_coef,  1., impf_EQ }
+	{ "", constraint_1_coef,  3., impf_CONS_T_EQ },
+	{ "", constraint_2_coef,  2., impf_CONS_T_EQ },
+	{ "", constraint_3_coef, -5., impf_CONS_T_EQ },
+	{ "", constraint_4_coef,  1., impf_CONS_T_EQ }
 };
 
 int main(void)
