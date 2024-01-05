@@ -62,8 +62,8 @@ void impf_diff_3fn(double (*f)(const double*, const int),
 		   double (*h)(const double*, const int),
 		   const double *x, const int n, double *out, double *buffer);
 /* Note: `buffer` is a double array, length = n + 4m */
-void impf_diff_mfn(void (*f)(const double*, double*),
-		   const double *x, const int n, double *out, const int m, double *buffer);
+void impf_diff_mfn(void (*f)(const double*, double*), const double *x, const int n,
+		   double *out, const int m, double *buffer);
 
 #ifdef __cpluscplus
 }

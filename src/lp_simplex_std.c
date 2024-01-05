@@ -37,12 +37,25 @@ static int is_basis_valid(const int *basis, const int m, const int n)
  */
 static int check_simplex_circled(const double *table, const int n, const double old_value)
 {
-	if (old_value <= table[n] + __impf_CHC_SPLX_DEGEN__) {
+	if (old_value <= table[n] + __impf_CHC_SPLX_CIRCLED__) {
 		if (is_simplex_optimal(table, n))
 			return 1;
 		return 2;
 	} else
 		return 0;
+}
+
+/* Return: index of var regarding of simplex table
+ */
+static int find_bv_degenerated(const double *table, const int ldtable, const int m, const int n)
+{
+	int i;
+
+	for (i = 0; i < m; i++) {
+		if (table[n + (i + 1) * ldtable] < __impf_CTR_SPLX_DEGEN__)
+			return i;
+	}
+	return m;
 }
 
 /* Choose the variable to leave basis

@@ -13,13 +13,13 @@ extern "C" {
  * Magic numbers used in linear algebra and numerical differentiation
  ******************************************************************************/
 
-#define __impf_IDF_LINALG_MAJ_ZERO__    1e-14
-#define __impf_IDF_LINALG_DET_ZERO__    1e-9
+#define __impf_IDF_LINALG_MAJ_ZERO__		1e-14
+#define __impf_IDF_LINALG_DET_ZERO__		1e-9
 
 /* The step of first-order differentiation in five-point formula
  * See "First order numerical differentiation family" in <diff.h>
  */
-#define __impf_DIFF_H__                 6e-4
+#define __impf_DIFF_H__				6e-4
 
 /*******************************************************************************
  * Magic numbers uses in simplex algorithm
@@ -34,29 +34,32 @@ extern "C" {
  ******************************************************************************/
 
 /* Identifier of non-zero beta */
-#define __impf_IDF_SPLX_ZEROS_BETA__        1e-9
+#define __impf_IDF_SPLX_ZEROS_BETA__		1e-9
 
 /* Identifier of cummulated error */
-#define __impf_IDF_SPLX_CUM_ERR__           1e-5
+#define __impf_IDF_SPLX_CUM_ERR__		1e-5
 
 /* Checker of the general checking "LP is optimal" */
-#define __impf_CTR_SPLX_OPTIMAL__           __impf_IDF_SPLX_ZEROS_BETA__
+#define __impf_CTR_SPLX_OPTIMAL__		__impf_IDF_SPLX_ZEROS_BETA__
 
-/* Checker of the checking "LP is feasible"  */
-#define __impf_CHC_SPLX_FEASIBLE__          __impf_IDF_SPLX_CUM_ERR__
+/* Checker of the checking "LP is feasible" */
+#define __impf_CHC_SPLX_FEASIBLE__		__impf_IDF_SPLX_CUM_ERR__
+
+/* Controller for degeneracy identification in Pan97 method */
+#define __impf_CTR_SPLX_DEGEN__			1e-12
 
 /* Checker of the checking "LP is degenerated" */
-#define __impf_CHC_SPLX_DEGEN__             1e-10
+#define __impf_CHC_SPLX_CIRCLED__		1e-10
 
 /* Checker of the checking "the value of phase 1 simplex is nonnegative" */
-#define __impf_CHC_SPLX_PHASE_1_NNVAL__     __impf_IDF_SPLX_CUM_ERR__
+#define __impf_CHC_SPLX_PHASE_1_NNVAL__		__impf_IDF_SPLX_CUM_ERR__
 
 /* Controller for pivot leaving rule */
-#define __impf_CTR_SPLX_PIVLEV_ZERO__       1e-15
+#define __impf_CTR_SPLX_PIVLEV_ZERO__		1e-15
 
 /* Controllers for Bland's rule */
-#define __impf_CTR_SPLX_BLAND_EPS__         1e-6
-#define __impf_CTR_SPLX_BLAND_EPS_MIN__     __impf_IDF_SPLX_ZEROS_BETA__
+#define __impf_CTR_SPLX_BLAND_EPS__		1e-6
+#define __impf_CTR_SPLX_BLAND_EPS_MIN__		__impf_IDF_SPLX_ZEROS_BETA__
 
 #ifdef __cpluscplus
 }
