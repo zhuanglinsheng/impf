@@ -40,35 +40,35 @@ set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 ###############################################################################
 set(SOURCES
 	src/utils.c
-	src/linalg_dscal.c
-	src/linalg_daxpy.c
-	src/linalg_dgels_L.c
-	src/linalg_dgels_n.c
-	src/linalg_dgels_2.c
-	src/linalg_dgels_3.c
-	src/diff_1f1.c
-	src/diff_1f2.c
-	src/diff_1f3.c
-	src/diff_1fn.c
-	src/diff_2f1.c
-	src/diff_2f2.c
-	src/diff_2f3.c
-	src/diff_2fn.c
-	src/diff_3f1.c
-	src/diff_3f2.c
-	src/diff_3f3.c
-	src/diff_3fn.c
-	src/diff_mfn.c
-	src/root_1f1_bisection.c
-	src/root_1f1_secant.c
-	src/root_1f1_newton.c
-	src/root_2f2_newton.c
-	src/root_3f3_newton.c
-	src/root_nfn_newton.c
-	src/lp_readmps.c
-	src/lp_simplex_std.c
-	src/lp_simplex_gen.c
-	src/lp_simplex_wrp.c
+	src/linalg/dscal.c
+	src/linalg/daxpy.c
+	src/linalg/dgels_L.c
+	src/linalg/dgels_n.c
+	src/linalg/dgels_2.c
+	src/linalg/dgels_3.c
+	src/diff/1f1.c
+	src/diff/1f2.c
+	src/diff/1f3.c
+	src/diff/1fn.c
+	src/diff/2f1.c
+	src/diff/2f2.c
+	src/diff/2f3.c
+	src/diff/2fn.c
+	src/diff/3f1.c
+	src/diff/3f2.c
+	src/diff/3f3.c
+	src/diff/3fn.c
+	src/diff/mfn.c
+	src/root/1f1_bisection.c
+	src/root/1f1_secant.c
+	src/root/1f1_newton.c
+	src/root/2f2_newton.c
+	src/root/3f3_newton.c
+	src/root/nfn_newton.c
+	src/lp/readmps.c
+	src/lp/simplex_std.c
+	src/lp/simplex_gen.c
+	src/lp/simplex_wrp.c
 )
 add_library(impf SHARED
 	${SOURCES}

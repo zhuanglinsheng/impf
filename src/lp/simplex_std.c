@@ -150,7 +150,7 @@ BLAND_BEGIN:
  */
 static void simplex_pivot_core(double *table, const int ldtable,
 			       const int m, const int n, const int p, const int q,
-			       int rule1, int rule2, int rule3)
+			       const int rule1, const int rule2, const int rule3)
 {
 	int i, ncol = n + 1, rowp = (p + 1) * ldtable;
 	double y_p_q = table[q + rowp];
@@ -294,8 +294,7 @@ static void simplex_free_buffer(double *table, int *basis, int *constypes)
  * Constraints rhs are transformed to be nonnegative,
  * "LE" and "GE" types are transformed respectively
  */
-static void simplex_fill_constypes(const struct impf_LinearConstraint *constraints,
-				   int *constypes, const int m)
+static void simplex_fill_constypes(const struct impf_LinearConstraint *constraints, int *constypes, const int m)
 {
 	int i;
 
@@ -371,8 +370,7 @@ static void simplex_table_size_usul(const struct impf_LinearConstraint *constrai
 /* Add slack variables (GE, LE) to simplex table
  * Return the number of slack variables
  */
-static int simplex_add_slack(double *table, const int ldtable, const int *constypes,
-			     const int m, const int n)
+static int simplex_add_slack(double *table, const int ldtable, const int *constypes, const int m, const int n)
 {
 	int i, nslack = 0;
 
@@ -481,13 +479,13 @@ static void transf_artif_basis(double *table, int ldtable, int *basis, const int
 
 static void delete_artif_cols(double *table, const int ldtable, const int m, const int nreal, const int nartif)
 {
-	if (nartif > 0) {  /* Delete artificial columns */
-		int i, rowi;
+	int i, rowi;
 
-		for (i = 0; i < m + 1; i++) {
-			rowi = i * ldtable;
-			table[nreal + rowi] = table[nreal + nartif + rowi];
-		}
+	if (nartif <= 0)  /* Delete artificial columns */
+		return;
+	for (i = 0; i < m + 1; i++) {
+		rowi = i * ldtable;
+		table[nreal + rowi] = table[nreal + nartif + rowi];
 	}
 }
 
