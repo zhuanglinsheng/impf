@@ -31,9 +31,9 @@ By the way, the name of this library `impf` means *implicit functions*, as it wa
 
 ### Differentiation ([diff.h](./include/impf/diff.h))
 
-- [impf_diff_1f1](./src/diff_1f1.c), [impf_diff_1f2](./src/diff_1f2.c), [impf_diff_1f3](./src/diff_1f3.c), [impf_diff_1fn](./src/diff_1fn.c)
-- [impf_diff_2f1](./src/diff_2f1.c), [impf_diff_2f2](./src/diff_2f2.c), [impf_diff_2f3](./src/diff_2f3.c), [impf_diff_2fn](./src/diff_2fn.c)
-- [impf_diff_3f1](./src/diff_3f1.c), [impf_diff_3f2](./src/diff_3f2.c), [impf_diff_3f3](./src/diff_3f3.c), [impf_diff_3fn](./src/diff_3fn.c), [impf_diff_mfn](./src/diff_mfn.c)
+- [impf_diff_1f1](./src/diff/1f1.c), [impf_diff_1f2](./src/diff/1f2.c), [impf_diff_1f3](./src/diff/1f3.c), [impf_diff_1fn](./src/diff/1fn.c)
+- [impf_diff_2f1](./src/diff/2f1.c), [impf_diff_2f2](./src/diff/2f2.c), [impf_diff_2f3](./src/diff/2f3.c), [impf_diff_2fn](./src/diff/2fn.c)
+- [impf_diff_3f1](./src/diff/3f1.c), [impf_diff_3f2](./src/diff/3f2.c), [impf_diff_3f3](./src/diff/3f3.c), [impf_diff_3fn](./src/diff/3fn.c), [impf_diff_mfn](./src/diff/mfn.c)
 
 Example:
 
@@ -42,16 +42,16 @@ Example:
 
 ### Root Finding ([root.h](./include/impf/root.h))
 
-- [impf_root_1f1_bisection](./src/root_1f1_bisection.c), [impf_root_1f1_secant](./src/root_1f1_secant.c), [impf_root_1f1_newton](./src/root_1f1_newton.c)
-- [impf_root_2f2_newton](./src/root_2f2_newton.c), [impf_root_3f3_newton](./src/root_3f3_newton.c), [impf_root_nfn_newton](./src/root_nfn_newton.c)
+- [impf_root_1f1_bisection](./src/root/1f1_bisection.c), [impf_root_1f1_secant](./src/root/1f1_secant.c), [impf_root_1f1_newton](./src/root/1f1_newton.c)
+- [impf_root_2f2_newton](./src/root/2f2_newton.c), [impf_root_3f3_newton](./src/root/3f3_newton.c), [impf_root_nfn_newton](./src/root/nfn_newton.c)
 
 Example:
 - [test_root_1f1.c](test/test_root_1f1.c), [test_root_2f2.c](test/test_root_2f2.c), [test_root_3f3.c](test/test_root_3f3.c), [test_root_nfn.c](test/test_root_nfn.c)
 
 ### Linear Programming ([fmin.h](./include/impf/fmin.h) & [lp.h](./include/impf/lp.h))
 
-- [impf_lp_readmps](./src/lp_readmps.c): import large scale LP model from MPS file
-- [impf_lp_simplex](./src/lp_simplex_gen.c): simplex algorithm
+- [impf_lp_readmps](./src/lp/readmps.c): import large scale LP model from MPS file
+- [impf_lp_simplex](./src/lp/simplex_gen.c): simplex algorithm
 
 Example:
 - [test_lp_simplex_1.c](test/test_lp_simplex_1.c), [test_lp_simplex_2.c](test/test_lp_simplex_2.c), [test_lp_simplex_3.c](test/test_lp_simplex_3.c)
