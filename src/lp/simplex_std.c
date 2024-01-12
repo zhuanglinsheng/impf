@@ -4,7 +4,7 @@
  */
 #include <impf/_magics.h>
 #include <impf/linalg.h>
-#include <impf/lp.h>
+#include <impf/fmin_lp.h>
 #include <string.h>
 #ifdef IMPF_MODE_DEV
 #include <stdio.h>
