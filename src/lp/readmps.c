@@ -2,7 +2,7 @@
  * Copyright (C) 2022 Zhuang Linsheng <zhuanglinsheng@outlook.com>
  * License: LGPL 3.0 <https://www.gnu.org/licenses/lgpl-3.0.html>
  */
-#include <impf/lp.h>
+#include <impf/fmin_lp.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
