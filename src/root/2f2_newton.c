@@ -28,8 +28,8 @@ int impf_root_2f2_newton(double (*f)(const double, const double), double (*g)(co
 	for (epoch = 0; epoch <= niter; epoch++) {
 		impf_diff_2f2(f, g, *x, *y, jac);
 
-		if (impf_linalg_dgels_2(jac[0], jac[1], jac[2], jac[3], f0, g0, x1_arr, code) == EXIT_FAILURE)
-			return EXIT_FAILURE; /* code already updated*/
+		if (impf_linalg_dgels_2(jac[0], jac[1], jac[2], jac[3], f0, g0, x1_arr, code) == impf_EXIT_FAILURE)
+			return impf_EXIT_FAILURE; /* code already updated*/
 		x1_arr[0] = *x - x1_arr[0];
 		x1_arr[1] = *y - x1_arr[1];
 		f0 = f(x1_arr[0], x1_arr[1]);
@@ -42,11 +42,11 @@ int impf_root_2f2_newton(double (*f)(const double, const double), double (*g)(co
 			*x = x1_arr[0];
 			*y = x1_arr[1];
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
 		*x = x1_arr[0];
 		*y = x1_arr[1];
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

@@ -24,9 +24,9 @@ int main(void)
 			b[0], b[1], b[2], x1, &code);
 
 	printf("Error code = %u\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	state = impf_linalg_dgels_n(3, 1, A, 3, b, 1, ipvt, x2, buffer, &code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(maxabs_arrd_gap(x1, x2, 3, 1) < 1e-8);
 	return 0;
 }

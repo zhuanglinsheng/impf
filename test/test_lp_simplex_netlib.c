@@ -4,7 +4,6 @@
  */
 #include <impf/fmin_lp.h>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 
 void netlib_bm(const char *bm, const int n, const double fval)
@@ -18,14 +17,14 @@ void netlib_bm(const char *bm, const int n, const double fval)
 	struct impf_Model_LP *model = NULL;
 	char file[80];
 
-	memset(file, '\0', 80);
-	memcpy(file, "../../include/netlib/lp/data/", 29);
-	memcpy(file + 29, bm, n);
+	impf_memset(file, '\0', 80);
+	impf_memcpy(file, "../../include/netlib/lp/data/", 29);
+	impf_memcpy(file + 29, bm, n);
 	model = impf_lp_readmps(file);
 	assert(model != NULL);
 	printf("\nBenchmark = \"%s\"\n", bm);
 	printf("m = %i, n = %i\n", model->m, model->n);
-	x = malloc((model->n) * sizeof(double));
+	x = impf_malloc((model->n) * sizeof(double));
 
 	start = clock();
 	state = impf_lp_simplex_wrp(model, "bland", 2000, x, &value, &code);
@@ -36,11 +35,11 @@ void netlib_bm(const char *bm, const int n, const double fval)
 
 	printf("Duration = %.fus, %.4fms, %.4fs\n", usec, msec, sec);
 	printf("Error code = %u\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	printf("value = %.11e\n\n", value);
 	assert(value <= fval);
 	impf_lp_free(model);
-	free(x);
+	impf_free(x);
 }
 
 int main(void)

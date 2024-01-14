@@ -23,12 +23,12 @@ int impf_root_1f1_secant(double (*f)(const double), double *x, double *y, int *c
 
 		if (tol > __impf_ABS__(*x - *y) && tolf > __impf_ABS__(fx)) {
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
 		z = *y - ((*y) - (*x)) * fy / (fy - fx);
 		*x = *y;
 		*y = z;
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

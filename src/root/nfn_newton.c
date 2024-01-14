@@ -6,7 +6,6 @@
 #include <impf/diff.h>
 #include <impf/linalg.h>
 #include <impf/root.h>
-#include <string.h>
 #ifdef IMPF_MODE_DEV
 #include <stdio.h>
 #endif
@@ -116,8 +115,8 @@ int impf_root_nfn_newton(void (*f)(const double*, double*), double *x, const int
 		else
 			impf_diff_mfn(f, x, n, Jac, n, calc_buffer);
 
-		if (impf_linalg_dgels_n(n, 1, Jac, n, fx, 1, ipvt, x1_arr, calc_buffer, code) == EXIT_FAILURE)
-			return EXIT_FAILURE; /* error code already updated*/
+		if (impf_linalg_dgels_n(n, 1, Jac, n, fx, 1, ipvt, x1_arr, calc_buffer, code) == impf_EXIT_FAILURE)
+			return impf_EXIT_FAILURE; /* error code already updated*/
 		for (i = 0; i < n; i++) {
 			x1_arr[i] -= x[i];
 			x1_arr[i] = -x1_arr[i];
@@ -125,12 +124,12 @@ int impf_root_nfn_newton(void (*f)(const double*, double*), double *x, const int
 		f(x1_arr, fx);
 		if (tolf >= maxabs_arrd(fx, n, 1)
 		 && tol >= maxabs_arrd_gap(x, x1_arr, n, 1)) {
-			memcpy(x, x1_arr, n * sizeof(double));
+			impf_memcpy(x, x1_arr, n * sizeof(double));
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
-		memcpy(x, x1_arr, n * sizeof(double));
+		impf_memcpy(x, x1_arr, n * sizeof(double));
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

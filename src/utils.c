@@ -4,6 +4,8 @@
  */
 #include <impf/utils.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int is_in_arri(const int idx, const int *idxset, const int len)
 {
@@ -158,55 +160,42 @@ void impf_prt_matd(const double *mat, const int ld, const int nrow, const int nc
 	}
 }
 
-/* Find the maximum absolute value of a row
- */
-long double table_abs_rowmax(const long double *table, const int ldtable,
-			     const int nrow, const int ncol, const int idx,
-			     const int *excludes, const int m)
+void *impf_malloc(size_t size)
 {
-	long double rowmax = __impf_NINF__;
-	int j;
-
-	for (j = 0; j < ncol; j++) {
-		if (is_in_arri(j, excludes, m))
-			continue;
-		if (__impf_ABS__(table[j + idx * ldtable]) > rowmax)
-			rowmax = __impf_ABS__(table[j + idx * ldtable]);
-	}
-	return rowmax;
+	return malloc(size);
 }
 
-long double table_abs_colmax(const long double *table, const int ldtable,
-			     const int nrow, const int ncol, const int idx)
+void impf_free(void *ptr)
 {
-	long double colmax = __impf_NINF__;
-	int i;
-
-	for (i = 0; i < nrow; i++) {
-		if (__impf_ABS__(table[idx + i * ldtable]) > colmax)
-			colmax = __impf_ABS__(table[idx + i * ldtable]);
-	}
-	return colmax;
+	free(ptr);
 }
 
-/* Find the minimum non-zero absolute value of a row
- *
- * Note: a zero identifier `zeroidf` is required
- */
-long double table_abs_rowmin(const long double *table, const int ldtable,
-			     const int nrow, const int ncol, const int idx,
-			     const int *excludes, const int m,
-			     const long double zeroidf)
+void *impf_memset(void *str, int c, size_t n)
 {
-	long double e, rowmin = __impf_INF__;
-	int j;
+	return memset(str, c, n);
+}
 
-	for (j = 0; j < ncol; j++) {
-		if (is_in_arri(j, excludes, m))
-			continue;
-		e = __impf_ABS__(table[j + idx * ldtable]);
-		if (e > zeroidf && e < rowmin)
-			rowmin = e;
-	}
-	return rowmin;
+void *impf_memcpy(void *dest, const void *src, size_t n)
+{
+	return memcpy(dest, src, n);
+}
+
+int impf_memcmp(const void *str1, const void *str2, size_t n)
+{
+	return memcmp(str1, str2, n);
+}
+
+size_t impf_strcspn(const char *str1, const char *str2)
+{
+	return strcspn(str1, str2);
+}
+
+size_t impf_strlen(const char *str)
+{
+	return strlen(str);
+}
+
+double impf_atof(const char* str)
+{
+	return atof(str);
 }

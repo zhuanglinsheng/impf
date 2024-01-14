@@ -41,7 +41,7 @@ int main(void)
 	int state = impf_lp_simplex(obj, constraints, NULL, m, n, "bland", 1000, x, &value, &code);
 
 	printf("Error code = %u\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(__impf_ABS__(value + 22.5) < 1e-8);
 	assert(__impf_ABS__(x[0] - 4.5) < 1e-8);
 	assert(__impf_ABS__(x[1] - 4.5) < 1e-8);

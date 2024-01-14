@@ -22,12 +22,12 @@ int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, int
 
 	if (fx * fy > 0) {
 		*code = impf_CondUnsatisfied;
-		return EXIT_FAILURE;
+		return impf_EXIT_FAILURE;
 	}
 	for (epoch = 0; epoch <= niter; epoch++) {
 		if (tol > __impf_ABS__(*x - *y) && tolf > __impf_ABS__(fx)) {
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
 		z = (*x + *y) / 2;
 		fz = f(z);
@@ -41,5 +41,5 @@ int impf_root_1f1_bisection(double (*f)(const double), double *x, double *y, int
 		}
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

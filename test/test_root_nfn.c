@@ -26,7 +26,7 @@ int main(void)
 	int state = impf_root_nfn_newton(f, x, 3, buffer, ipvt, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(maxabs_arrd(fx, 3, 1) < 1e-8);
 	return 0;
 }

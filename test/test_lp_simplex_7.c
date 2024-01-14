@@ -40,7 +40,7 @@ int main(void)
 
 	printf("Error code = %u\n", code);
 	printf("value = %e\n", value);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(__impf_ABS__(value - 7. / 4.) < 1e-8);
 	assert(__impf_ABS__(x[0] - 0.5) < 1e-8);
 	assert(__impf_ABS__(x[1] - 1.25) < 1e-8);

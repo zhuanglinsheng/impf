@@ -10,7 +10,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <assert.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 #define __impf_ABS__(x) ((x) >= 0 ? (x) : (-(x)))
 #define __impf_MAX__(x, y) ((x) >= (y) ? (x) : (y))
@@ -60,8 +60,32 @@ void impf_prt_arrld(const long double *arr, const int len, const int inc, const 
 
 void impf_prt_matd(const double *mat, const int ld, const int nrow, const int ncol);
 
+/*******************************************************************************
+ * Utils of "memory-family"
+ ******************************************************************************/
+
+void *impf_malloc(size_t size);
+void impf_free(void *ptr);
+void *impf_memset(void *str, int c, size_t n);
+void *impf_memcpy(void *dest, const void *src, size_t n);
+int impf_memcmp(const void *str1, const void *str2, size_t n);
+size_t impf_strcspn(const char *str1, const char *str2);
+size_t impf_strlen(const char *str);
+double impf_atof(const char* str);
+
+/*******************************************************************************
+ * Utils of "state-family"
+ ******************************************************************************/
+
+#define impf_EXIT_SUCCESS 0
+#define impf_EXIT_FAILURE 1
+
+/*******************************************************************************
+ * Utils of "mode-family"
+ ******************************************************************************/
+
 /* developing mode (only for development) */
-#define IMPF_MODE_DEV
+/* #define IMPF_MODE_DEV */
 
 /* debug mode (only for for development) */
 /* #define IMPF_MODE_DEBUG */

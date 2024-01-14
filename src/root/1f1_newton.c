@@ -25,7 +25,7 @@ int impf_root_1f1_newton(double (*f)(const double), double *x, int *code,
 
 		if (__impf_IDF_LINALG_DET_ZERO__ >= __impf_ABS__(grd)) {
 			*code = impf_Singularity;
-			return EXIT_FAILURE;
+			return impf_EXIT_FAILURE;
 		}
 		x1 = *x - fx / grd;
 		fx = f(x1);
@@ -33,10 +33,10 @@ int impf_root_1f1_newton(double (*f)(const double), double *x, int *code,
 		if (tol >= __impf_ABS__(*x - x1) && tolf >= __impf_ABS__(fx)) {
 			*x = x1;
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
 		*x = x1;
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

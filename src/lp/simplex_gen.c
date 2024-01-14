@@ -3,7 +3,6 @@
  * License: LGPL 3.0 <https://www.gnu.org/licenses/lgpl-3.0.html>
  */
 #include <impf/fmin_lp.h>
-#include <string.h>
 #ifdef IMPF_MODE_DEV
 #include <stdio.h>
 #endif
@@ -16,40 +15,40 @@ static int stdlpf_alloc(const int M, const int N, double **obj2, double **x2, do
 	*coef2 = NULL;
 	*constraints2 = NULL;
 
-	*obj2 = malloc(N * sizeof(double));
+	*obj2 = impf_malloc(N * sizeof(double));
 	if (*obj2 == NULL)
-		return EXIT_FAILURE;
-	*x2 = malloc(N * sizeof(double));
+		return impf_EXIT_FAILURE;
+	*x2 = impf_malloc(N * sizeof(double));
 	if (*x2 == NULL) {
-		free(*obj2);
-		return EXIT_FAILURE;
+		impf_free(*obj2);
+		return impf_EXIT_FAILURE;
 	}
-	*coef2 = malloc(M * N * sizeof(double));
+	*coef2 = impf_malloc(M * N * sizeof(double));
 	if (*coef2 == NULL) {
-		free(*obj2);
-		free(*x2);
-		return EXIT_FAILURE;
+		impf_free(*obj2);
+		impf_free(*x2);
+		return impf_EXIT_FAILURE;
 	}
-	*constraints2 = malloc(M * sizeof(struct impf_LinearConstraint));
+	*constraints2 = impf_malloc(M * sizeof(struct impf_LinearConstraint));
 	if (*constraints2 == NULL) {
-		free(*obj2);
-		free(*x2);
-		free(*coef2);
-		return EXIT_FAILURE;
+		impf_free(*obj2);
+		impf_free(*x2);
+		impf_free(*coef2);
+		return impf_EXIT_FAILURE;
 	}
-	return EXIT_SUCCESS;
+	return impf_EXIT_SUCCESS;
 }
 
 static void stdlpf_free(double *obj2, double *x2, double *coef2, struct impf_LinearConstraint *constraints2)
 {
 	if (obj2)
-		free(obj2);
+		impf_free(obj2);
 	if (x2)
-		free(x2);
+		impf_free(x2);
 	if (coef2)
-		free(coef2);
+		impf_free(coef2);
 	if (constraints2)
-		free(constraints2);
+		impf_free(constraints2);
 }
 
 /* Get the size of standard form LP
@@ -212,18 +211,18 @@ int impf_lp_simplex(const double *objective, const struct impf_LinearConstraint 
 		return impf_lp_simplex_std(objective, constraints, m, n, criteria, niter, x, value, code);
 	stdlpf_size(bounds, m, n, &_M, &_N);
 
-	if (stdlpf_alloc(_M, _N, &obj2, &x2, &coef2, &constraints2) == EXIT_FAILURE) {
+	if (stdlpf_alloc(_M, _N, &obj2, &x2, &coef2, &constraints2) == impf_EXIT_FAILURE) {
 		*code = impf_MemoryAllocError;
-		return EXIT_FAILURE;
+		return impf_EXIT_FAILURE;
 	}
-	memset(coef2, 0., _M * _N);
+	impf_memset(coef2, 0., _M * _N);
 	lp_transstd(objective, constraints, bounds, m, n, _M, _N, obj2, &obj_diff, coef2, constraints2);
-	if (impf_lp_simplex_std(obj2, constraints2, _M, _N, criteria, niter, x2, &value2, code) == EXIT_SUCCESS) {
+	if (impf_lp_simplex_std(obj2, constraints2, _M, _N, criteria, niter, x2, &value2, code) == impf_EXIT_SUCCESS) {
 		retreive_ori_lp_sol(bounds, n, x2, value2, obj_diff, x, value);
 		stdlpf_free(obj2, x2, coef2, constraints2);
 		*code = impf_Success;
-		return EXIT_SUCCESS;
+		return impf_EXIT_SUCCESS;
 	}
 	stdlpf_free(obj2, x2, coef2, constraints2);
-	return EXIT_FAILURE; /* error code already updated */
+	return impf_EXIT_FAILURE; /* error code already updated */
 }

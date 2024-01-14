@@ -5,7 +5,6 @@
 #include <impf/_magics.h>
 #include <impf/linalg.h>
 #include <impf/fmin_lp.h>
-#include <string.h>
 #ifdef IMPF_MODE_DEV
 #include <stdio.h>
 #endif
@@ -187,9 +186,9 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 
 	if (is_simplex_optimal(table, n))
 		return 1;
-	if (7 == strlen(criteria) && 0 == memcmp("dantzig", criteria, 7))
+	if (7 == impf_strlen(criteria) && 0 == impf_memcmp("dantzig", criteria, 7))
 		q = simplex_dantzig_enter_rule(table, basis, m, n);
-	else if (5 == strlen(criteria) && 0 == memcmp("bland", criteria, 5))
+	else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
 		q = simplex_bland_enter_rule(table, basis, m, n);
 	else {  /* default method: "pan97" */
 		return 9;
@@ -262,31 +261,31 @@ static int simplex_create_buffer(double **table, int **basis, int **constypes,
 	*basis = NULL;
 	*constypes = NULL;
 
-	*table = malloc(nrow * ncol * sizeof(double));
+	*table = impf_malloc(nrow * ncol * sizeof(double));
 	if (*table == NULL)
-		return EXIT_FAILURE;
-	*basis = malloc(m * sizeof(int));
+		return impf_EXIT_FAILURE;
+	*basis = impf_malloc(m * sizeof(int));
 	if (*basis == NULL) {
-		free(*table);
-		return EXIT_FAILURE;
+		impf_free(*table);
+		return impf_EXIT_FAILURE;
 	}
-	*constypes = malloc(m * sizeof(int));
+	*constypes = impf_malloc(m * sizeof(int));
 	if (*constypes == NULL) {
-		free(*table);
-		free(*basis);
-		return EXIT_FAILURE;
+		impf_free(*table);
+		impf_free(*basis);
+		return impf_EXIT_FAILURE;
 	}
-	return EXIT_SUCCESS;
+	return impf_EXIT_SUCCESS;
 }
 
 static void simplex_free_buffer(double *table, int *basis, int *constypes)
 {
 	if (table)
-		free(table);
+		impf_free(table);
 	if (basis)
-		free(basis);
+		impf_free(basis);
 	if (constypes)
-		free(constypes);
+		impf_free(constypes);
 }
 
 /* Fill in constraint type array from "constraints"
@@ -328,7 +327,7 @@ static void simplex_fill_conscoefs(double *table, const int ldtable, const struc
 {
 	int i, j;
 
-	memset(table, 0., nrow * ldtable * sizeof(double));
+	impf_memset(table, 0., nrow * ldtable * sizeof(double));
 
 	for (i = 0; i < m; i++) {
 		const struct impf_LinearConstraint *cons = constraints + i;
@@ -336,7 +335,7 @@ static void simplex_fill_conscoefs(double *table, const int ldtable, const struc
 
 		if (cons->rhs >= 0) {
 			table[ncol - 1 + row] = cons->rhs;
-			memcpy(table + row, cons->coef, n * sizeof(double));
+			impf_memcpy(table + row, cons->coef, n * sizeof(double));
 		} else {
 			table[ncol - 1 + row] = -cons->rhs;
 			for (j = 0; j < n; j++)
@@ -464,7 +463,7 @@ static void transf_artif_basis(double *table, int ldtable, int *basis, const int
 		}
 		if (maxv < 1e-9) {
 			table[nvar + (i + 1) * ldtable] = 0.;
-			memset(table + (i + 1) * ldtable, 0, nreal * sizeof(double));
+			impf_memset(table + (i + 1) * ldtable, 0, nreal * sizeof(double));
 			continue;
 		}
 		simplex_pivot_core(table, ldtable, m, nvar, i, q, 1, 1, 0);
@@ -492,7 +491,7 @@ static void delete_artif_cols(double *table, const int ldtable, const int m, con
 /* Phase 1: get a BFS for the original problem using the usual way - artificial LP
  *
  * Work:
- * 	1. malloc for table, basis, constypes
+ * 	1. allocate memory for table, basis, constypes
  * 	2. form a basic feasible solution (BSF)
  * 	3. assign ldtable and nvar, the number of vars in BSF
  */
@@ -506,9 +505,9 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 
 	simplex_table_size_usul(constraints, m, n, &nrow, &ncol);
 	*ldtable = ncol;  /* leading dimension of table in memory */
-	if (simplex_create_buffer(table, basis, constypes, m, nrow, *ldtable) == EXIT_FAILURE) {
+	if (simplex_create_buffer(table, basis, constypes, m, nrow, *ldtable) == impf_EXIT_FAILURE) {
 		*code = impf_MemoryAllocError;
-		return EXIT_FAILURE;
+		return impf_EXIT_FAILURE;
 	}
 
 	simplex_fill_constypes(constraints, *constypes, m);
@@ -535,7 +534,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 		transf_artif_basis(*table, *ldtable, *basis, m, n + nslack, *nvar);
 		delete_artif_cols(*table, *ldtable, m, n + nslack, nartif);
 		*nvar = n + nslack;
-		return EXIT_SUCCESS;
+		return impf_EXIT_SUCCESS;
 	case 2:
 		*code = impf_PrecisionError;
 		goto END;
@@ -548,7 +547,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 	}
 END:
 	simplex_free_buffer(*table, *basis, *constypes);
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }
 
 /* Phase 2: Solve the original problem
@@ -563,7 +562,7 @@ static int simplex_phase_2_usul(double *table, int ldtable, int *basis, int *con
 		goto END;
 	case 1:
 		*code = impf_Success;
-		return EXIT_SUCCESS;
+		return impf_EXIT_SUCCESS;
 	case 2:
 		*code = impf_Unboundedness;
 		goto END;
@@ -576,7 +575,7 @@ static int simplex_phase_2_usul(double *table, int ldtable, int *basis, int *con
 	}
 END:
 	simplex_free_buffer(table, basis, constypes);
-	return EXIT_FAILURE;  /* error code already updated */
+	return impf_EXIT_FAILURE;  /* error code already updated */
 }
 
 int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstraint *constraints,
@@ -601,8 +600,8 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 	printf("Phase 1 Begin:\n");
 #endif
 	if (simplex_phase_1_usul(&table, &ldtable, &basis, &constypes, &nvar, &epoch, code,
-				 constraints, m, n, criteria, niter) == EXIT_FAILURE)
-		return EXIT_FAILURE;
+				 constraints, m, n, criteria, niter) == impf_EXIT_FAILURE)
+		return impf_EXIT_FAILURE;
 #ifdef IMPF_MODE_DEV
 	printf("Phase 1 Done.\n");
 #endif
@@ -619,18 +618,18 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 		impf_linalg_daxpy(nvar + 1, ratio, table + rowi, 1, table, 1);
 	}
 	if (simplex_phase_2_usul(table, ldtable, basis, constypes, &epoch, code,
-				 m, n, nvar, criteria, niter) == EXIT_FAILURE)
-		return EXIT_FAILURE;
+				 m, n, nvar, criteria, niter) == impf_EXIT_FAILURE)
+		return impf_EXIT_FAILURE;
 #ifdef IMPF_MODE_DEV
 	printf("Phase 2 Done.\n");
 #endif
 
 	*value = table[nvar];
-	memset(x, 0., n * sizeof(double));
+	impf_memset(x, 0., n * sizeof(double));
 	for (i = 0; i < m; i++) {
 		if (basis[i] < n)
 			x[basis[i]] = table[nvar + (i + 1) * ldtable];
 	}
 	simplex_free_buffer(table, basis, constypes);
-	return EXIT_SUCCESS;
+	return impf_EXIT_SUCCESS;
 }

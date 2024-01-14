@@ -18,9 +18,9 @@ int impf_linalg_dgels_2(const double A11, const double A12, const double A21, co
 
 	if (__impf_ABS__(det) < __impf_IDF_LINALG_DET_ZERO__) {
 		*code = impf_Singularity;
-		return EXIT_FAILURE;
+		return impf_EXIT_FAILURE;
 	} else {
 		*code = impf_Success;
-		return EXIT_SUCCESS;
+		return impf_EXIT_SUCCESS;
 	}
 }

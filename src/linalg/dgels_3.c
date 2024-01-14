@@ -23,7 +23,7 @@ int impf_linalg_dgels_3(const double A11, const double A12, const double A13,
 
 	if (__impf_ABS__(detA) < __impf_IDF_LINALG_DET_ZERO__) {
 		*code = impf_Singularity;
-		return EXIT_FAILURE;
+		return impf_EXIT_FAILURE;
 	}
 	detA1 = b1 * tmp1 - A12 * (b2 * A33 - b3 * A23) + A13 * (b2 * A32 - b3 * A22);
 	detA2 = A11 * (b2 * A33 - b3 * A23) - b1 * tmp2 + A13 * (A21 * b3 - A31 * b2);
@@ -33,5 +33,5 @@ int impf_linalg_dgels_3(const double A11, const double A12, const double A13,
 	*(x + 1) = detA2 / detA;
 	*(x + 2) = detA3 / detA;
 	*code = impf_Success;
-	return EXIT_SUCCESS;
+	return impf_EXIT_SUCCESS;
 }

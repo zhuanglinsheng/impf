@@ -36,8 +36,8 @@ int impf_root_3f3_newton(double (*f)(const double, const double, const double),
 		if (impf_linalg_dgels_3(jac[0], jac[1], jac[2],
 					jac[3], jac[4], jac[5],
 					jac[6], jac[7], jac[8],
-					f0, g0, h0, x1_arr, code) == EXIT_FAILURE)
-			return EXIT_FAILURE; /* code already updated*/
+					f0, g0, h0, x1_arr, code) == impf_EXIT_FAILURE)
+			return impf_EXIT_FAILURE; /* code already updated*/
 		x1_arr[0] = *x - x1_arr[0];
 		x1_arr[1] = *y - x1_arr[1];
 		x1_arr[2] = *z - x1_arr[2];
@@ -55,12 +55,12 @@ int impf_root_3f3_newton(double (*f)(const double, const double, const double),
 			*y = x1_arr[1];
 			*z = x1_arr[2];
 			*code = impf_Success;
-			return EXIT_SUCCESS;
+			return impf_EXIT_SUCCESS;
 		}
 		*x = x1_arr[0];
 		*y = x1_arr[1];
 		*z = x1_arr[2];
 	}
 	*code = impf_ExceedIterLimit;
-	return EXIT_FAILURE;
+	return impf_EXIT_FAILURE;
 }

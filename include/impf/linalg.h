@@ -35,7 +35,7 @@ int impf_linalg_dgels_3(const double A11, const double A12, const double A13,
 /* Note: `buffer` is a double array, length = n * (n + nrhs) */
 int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int lda, const double *b,
 			const int ldb, int *ipvt, double *x, double *buffer, int *code);
-/* wrapper of `impf_linalg_dgels_n` by using malloc */
+/* wrapper of `impf_linalg_dgels_n` by using impf_malloc */
 int impf_linalg_dgels_L(const int n, const int nrhs, const double *a, const int lda, const double *b,
 			const int ldb, int *ipvt, double *x, int *code);
 

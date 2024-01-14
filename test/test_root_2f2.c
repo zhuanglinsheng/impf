@@ -25,7 +25,7 @@ int main(void)
 	int state = impf_root_2f2_newton(f, g, &x, &y, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(__impf_ABS__(f(x, y)) < 1e-8);
 	assert(__impf_ABS__(g(x, y)) < 1e-8);
 	return 0;

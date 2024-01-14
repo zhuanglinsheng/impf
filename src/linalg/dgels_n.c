@@ -4,7 +4,6 @@
  */
 #include <impf/_magics.h>
 #include <impf/linalg.h>
-#include <string.h>
 #ifdef IMPF_MODE_DEV
 #include <stdio.h>
 #endif
@@ -43,10 +42,10 @@ int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int 
 	for (i = 0; i < n; i++) {
 		int rowi = i * ncol;
 
-		memcpy(buffer + rowi, a + i * lda, n * sizeof(double));
-		memcpy(buffer + rowi + n, b + i * ldb, nrhs * sizeof(double));
+		impf_memcpy(buffer + rowi, a + i * lda, n * sizeof(double));
+		impf_memcpy(buffer + rowi + n, b + i * ldb, nrhs * sizeof(double));
 	}
-	memset(ipvt, 0, n * sizeof(int));
+	impf_memset(ipvt, 0, n * sizeof(int));
 
 	for (i = 0; i < n; i++) {
 		int rowi = i * ncol;
@@ -58,7 +57,7 @@ int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int 
 
 		if (__impf_ABS__(majorv_i) < __impf_IDF_LINALG_MAJ_ZERO__) {
 			*code = impf_Singularity;
-			return EXIT_FAILURE;
+			return impf_EXIT_FAILURE;
 		}
 		impf_linalg_dscal(ncol, 1. / majorv_i, prowi, 1);
 
@@ -75,8 +74,8 @@ int impf_linalg_dgels_n(const int n, const int nrhs, const double *a, const int 
 		int rowi = i * ncol;
 		int rowx = ipvt[i] * nrhs;
 
-		memcpy(x + rowx, buffer + n + rowi, nrhs * sizeof(double));
+		impf_memcpy(x + rowx, buffer + n + rowi, nrhs * sizeof(double));
 	}
 	*code = impf_Success;
-	return EXIT_SUCCESS;
+	return impf_EXIT_SUCCESS;
 }

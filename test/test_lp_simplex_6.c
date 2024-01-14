@@ -89,7 +89,7 @@ int main(void)
 	int state = impf_lp_simplex(obj, constraints, NULL, m, n, "bland", 1000, x, &value, &code);
 
 	printf("error code = %u\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	printf("value = %.10e\nSolution = ", value);
 	impf_prt_arrd(x, n, 1, 0);
 	printf("\n");

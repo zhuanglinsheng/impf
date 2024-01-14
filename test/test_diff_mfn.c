@@ -4,7 +4,6 @@
  */
 #include <impf/diff.h>
 #include <math.h>
-#include <string.h>
 
 /* f(x, n; a, b, c) = (x1 + x2 + x3)^2 */
 double f(const double *x, const int n)
@@ -45,7 +44,7 @@ void f2(const double *x, double *out)
 {
 	int i;
 
-	memset(out, 0, 3 * sizeof(double));
+	impf_memset(out, 0, 3 * sizeof(double));
 
 	for (i = 0; i < 3; i++) {
 		out[0] += x[i];

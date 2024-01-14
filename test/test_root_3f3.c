@@ -30,7 +30,7 @@ int main(void)
 	int state = impf_root_3f3_newton(f, g, h, &x, &y, &z, &code, 1e-8, 1e-8, 1000);
 
 	printf("error = %i\n", code);
-	assert(state == EXIT_SUCCESS);
+	assert(state == impf_EXIT_SUCCESS);
 	assert(__impf_ABS__(f(x, y, z)) < 1e-8);
 	assert(__impf_ABS__(g(x, y, z)) < 1e-8);
 	assert(__impf_ABS__(h(x, y, z)) < 1e-8);

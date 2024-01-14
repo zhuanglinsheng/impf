@@ -4,7 +4,6 @@
  */
 #include <impf/_magics.h>
 #include <impf/diff.h>
-#include <string.h>
 
 void impf_diff_mfn(void (*f)(const double*, double*),
 		   const double *x, const int n, double *out, const int m, double *buffer)
@@ -28,7 +27,7 @@ void impf_diff_mfn(void (*f)(const double*, double*),
 	ret3 = ret2 + m;
 	ret4 = ret3 + m;
 
-	memcpy(point, x, sizeof(double) * n);
+	impf_memcpy(point, x, sizeof(double) * n);
 
 	for (j = 0; j < n; j++) {  /* Column j */
 		*(point + j) -= two_h;
