@@ -18,7 +18,7 @@ void netlib_bm(const char *bm, const int n, const double fval)
 	char file[80];
 
 	impf_memset(file, '\0', 80);
-	impf_memcpy(file, "../../include/netlib/lp/data/", 29);
+	impf_memcpy(file, "../../extern/netlib/lp/data/", 29);
 	impf_memcpy(file + 29, bm, n);
 	model = impf_lp_readmps(file);
 	assert(model != NULL);
