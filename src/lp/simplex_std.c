@@ -191,6 +191,8 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 	else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
 		q = simplex_bland_enter_rule(table, basis, m, n);
 	else {  /* default method: "pan97" */
+		int idx_degen = find_bv_degenerated(table, ldtable, m, n);
+
 		return 9;
 	}
 	if (n <= q)
