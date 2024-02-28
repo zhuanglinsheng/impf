@@ -48,7 +48,7 @@ Example:
 Example:
 - [test_root_1f1.c](test/test_root_1f1.c), [test_root_2f2.c](test/test_root_2f2.c), [test_root_3f3.c](test/test_root_3f3.c), [test_root_nfn.c](test/test_root_nfn.c)
 
-### Linear Programming ([fmin.h](./include/impf/fmin.h) & [lp.h](./include/impf/lp.h))
+### Linear Programming ([fmin.h](./include/impf/fmin.h) & [lp.h](./include/impf/fmin_lp.h))
 
 - [impf_lp_readmps](./src/lp/readmps.c): import large scale LP model from MPS file
 - [impf_lp_simplex](./src/lp/simplex_gen.c): simplex algorithm
