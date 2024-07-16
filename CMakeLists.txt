@@ -11,14 +11,14 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_EXTENSIONS OFF)
 if(MSVC)
 	# Force to always compile with W4
-	if(CMAKE_C_FLAGS MATCHES "/W[0-4]")
-		string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+	if(CMAKE_C_FLAGS_DEBUG MATCHES "/W[0-4]")
+		string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
 	else()
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4 -fsanitize=address")
+		set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /W4 -fsanitize=address")
 	endif()
 else()
 	# Update if necessary
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-long-long -pedantic -fsanitize=address")
+	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-long-long -pedantic -fsanitize=address")
 endif()
 ##
 ## Installation setting
@@ -27,6 +27,7 @@ endif()
 ## set the value of `CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT` to be
 ## `true` by switch the comments:
 ##
+set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "..." FORCE)
 set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT false)
 ##
 ## Then set the installation location below by changing the default value
@@ -107,7 +108,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/impf
 
 ## (Default) The "Release" mode is for installation.
 if (CMAKE_BUILD_TYPE AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
-	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -O2")
+	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -O2 -DNDEBUG")
 ##
 ## The "Debug" mode is for unit testings.
 elseif (CMAKE_BUILD_TYPE AND (CMAKE_BUILD_TYPE STREQUAL "Debug"))
