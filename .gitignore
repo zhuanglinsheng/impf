@@ -5,3 +5,4 @@ build/*
 *.log
 *.exe
 cmake-build-debug/*
+impf.egg-info/*
