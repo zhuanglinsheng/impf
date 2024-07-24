@@ -45,7 +45,7 @@ static int check_simplex_circled(const double *table, const int n, const double 
 }
 
 /* Return: index of var regarding of simplex table
- */
+
 static int find_bv_degenerated(const double *table, const int ldtable, const int m, const int n)
 {
 	int i;
@@ -56,6 +56,7 @@ static int find_bv_degenerated(const double *table, const int ldtable, const int
 	}
 	return m;
 }
+ */
 
 /* Choose the variable to leave basis
  * Return the index of the variable and check weather LP is "bounded"
@@ -191,7 +192,7 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 	else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
 		q = simplex_bland_enter_rule(table, basis, m, n);
 	else {  /* default method: "pan97" */
-		int idx_degen = find_bv_degenerated(table, ldtable, m, n);
+		/* int idx_degen = find_bv_degenerated(table, ldtable, m, n); */
 
 		return 9;
 	}
