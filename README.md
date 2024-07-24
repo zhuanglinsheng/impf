@@ -48,15 +48,20 @@ prob = optm.LinearProgramming(obj, constraints)
 prob
 ```
 
-max  [3.0, 2.0]
-s.t.
-     [1.0, 1.0] <= 9.0
-     [3.0, 1.0] <= 18.0
-     [1.0, 0.0] <= 7.0
-     [0.0, 1.0] <= 6.0
+<div>  
+max&nbsp;&nbsp;[3.0, 2.0]<br>
+s.t.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.0, 1.0] <= 9.0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3.0, 1.0] <= 18.0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1.0, 0.0] <= 7.0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0.0, 1.0] <= 6.0<br>
+</div>
 
 ```python
 prob.solve()
 ```
 
+<div> 
 [4.5, 4.499999999999999]
+</div>
+
