@@ -10,6 +10,145 @@
 #include <stdio.h>
 #endif
 
+int impf_root_1f1_newton(double (*f)(const double), double *x, int *code,
+			 const double tol, const double tolf, const int niter)
+{
+	double x1, grd, fx;
+	int epoch;
+
+	assert(f != NULL);
+	assert(x != NULL);
+	assert(code != NULL);
+	assert(tol  > 0);
+	assert(tolf > 0);
+
+	fx = f(*x);
+
+	for (epoch = 0; epoch <= niter; epoch++) {
+		impf_diff_1f1(f, *x, &grd);
+
+		if (__impf_IDF_LINALG_DET_ZERO__ >= __impf_ABS__(grd)) {
+			*code = impf_Singularity;
+			return impf_EXIT_FAILURE;
+		}
+		x1 = *x - fx / grd;
+		fx = f(x1);
+
+		if (tol >= __impf_ABS__(*x - x1) && tolf >= __impf_ABS__(fx)) {
+			*x = x1;
+			*code = impf_Success;
+			return impf_EXIT_SUCCESS;
+		}
+		*x = x1;
+	}
+	*code = impf_ExceedIterLimit;
+	return impf_EXIT_FAILURE;
+}
+
+int impf_root_2f2_newton(double (*f)(const double, const double), double (*g)(const double, const double),
+			 double *x, double *y, int *code,
+			 const double tol, const double tolf, const int niter)
+{
+	double jac[4], x1_arr[2];
+	double f0, g0;
+	int epoch;
+
+	assert(f != NULL);
+	assert(g != NULL);
+	assert(x != NULL);
+	assert(y != NULL);
+	assert(code != NULL);
+	assert(tol  > 0);
+	assert(tolf > 0);
+
+	f0 = f(*x, *y);
+	g0 = g(*x, *y);
+
+	for (epoch = 0; epoch <= niter; epoch++) {
+		impf_diff_2f2(f, g, *x, *y, jac);
+
+		if (impf_linalg_dgels_2(jac[0], jac[1], jac[2], jac[3], f0, g0, x1_arr, code) == impf_EXIT_FAILURE)
+			return impf_EXIT_FAILURE; /* code already updated*/
+		x1_arr[0] = *x - x1_arr[0];
+		x1_arr[1] = *y - x1_arr[1];
+		f0 = f(x1_arr[0], x1_arr[1]);
+		g0 = g(x1_arr[0], x1_arr[1]);
+
+		if (tol  >= __impf_ABS__(*x - x1_arr[0])
+		 && tol  >= __impf_ABS__(*y - x1_arr[1])
+		 && tolf >= __impf_ABS__(f0)
+		 && tolf >= __impf_ABS__(g0)) {
+			*x = x1_arr[0];
+			*y = x1_arr[1];
+			*code = impf_Success;
+			return impf_EXIT_SUCCESS;
+		}
+		*x = x1_arr[0];
+		*y = x1_arr[1];
+	}
+	*code = impf_ExceedIterLimit;
+	return impf_EXIT_FAILURE;
+}
+
+int impf_root_3f3_newton(double (*f)(const double, const double, const double),
+			 double (*g)(const double, const double, const double),
+			 double (*h)(const double, const double, const double),
+			 double *x, double *y, double *z, int *code,
+			 const double tol, const double tolf, const int niter)
+{
+	double jac[9], x1_arr[3];
+	double f0, g0, h0;
+	int epoch;
+
+	assert(f != NULL);
+	assert(g != NULL);
+	assert(h != NULL);
+	assert(x != NULL);
+	assert(y != NULL);
+	assert(z != NULL);
+	assert(code != NULL);
+	assert(tol > 0);
+	assert(tolf > 0);
+
+	f0 = f(*x, *y, *z);
+	g0 = g(*x, *y, *z);
+	h0 = h(*x, *y, *z);
+
+	for (epoch = 0; epoch < niter; epoch++) {
+		impf_diff_3f3(f, g, h, *x, *y, *z, jac);
+
+		if (impf_linalg_dgels_3(jac[0], jac[1], jac[2],
+					jac[3], jac[4], jac[5],
+					jac[6], jac[7], jac[8],
+					f0, g0, h0, x1_arr, code) == impf_EXIT_FAILURE)
+			return impf_EXIT_FAILURE; /* code already updated*/
+		x1_arr[0] = *x - x1_arr[0];
+		x1_arr[1] = *y - x1_arr[1];
+		x1_arr[2] = *z - x1_arr[2];
+		f0 = f(x1_arr[0], x1_arr[1], x1_arr[2]);
+		g0 = g(x1_arr[0], x1_arr[1], x1_arr[2]);
+		h0 = h(x1_arr[0], x1_arr[1], x1_arr[2]);
+
+		if (tol  >= __impf_ABS__(*x - x1_arr[0])
+		 && tol  >= __impf_ABS__(*y - x1_arr[1])
+		 && tol  >= __impf_ABS__(*z - x1_arr[2])
+		 && tolf >= __impf_ABS__(f0)
+		 && tolf >= __impf_ABS__(g0)
+		 && tolf >= __impf_ABS__(h0)) {
+			*x = x1_arr[0];
+			*y = x1_arr[1];
+			*z = x1_arr[2];
+			*code = impf_Success;
+			return impf_EXIT_SUCCESS;
+		}
+		*x = x1_arr[0];
+		*y = x1_arr[1];
+		*z = x1_arr[2];
+	}
+	*code = impf_ExceedIterLimit;
+	return impf_EXIT_FAILURE;
+}
+
 static void diff_1f1(void (*f)(const double*, double*), double *x, double * Jac)
 {
 	double p1, p2, p3, p4;

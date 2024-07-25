@@ -14,13 +14,13 @@ static PyMethodDef test_Methods[] = {
 /* Module structure */
 static struct PyModuleDef test_module = {
 	PyModuleDef_HEAD_INIT,
-	"clib_test",
+	"_clib_test",
 	"Test Module",
 	-1,
 	test_Methods
 };
 
 /* Module initialization function */
-PyMODINIT_FUNC PyInit_clib_test(void) {
+PyMODINIT_FUNC PyInit__clib_test(void) {
 	return PyModule_Create(&test_module);
 }

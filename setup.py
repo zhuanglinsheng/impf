@@ -1,9 +1,10 @@
 from setuptools import setup, Extension
 
-module_test = Extension('impf.clib_test',
-			sources=['src/pytest.c'])
-module_optm = Extension('impf.clib_optm',
-			sources=['src/pyoptm.c',
+module_test = Extension('impf._clib_test',
+			sources=['src/pywrp_test.c'])
+module_optm = Extension('impf._clib_optm',
+			sources=[
+				'src/pywrp_optm.c',
 	    			'src/utils.c',
 				'src/linalg/daxpy.c',
 				'src/linalg/dscal.c',
@@ -24,7 +25,7 @@ setup(
 		module_test,
 		module_optm,
 		],
-	python_requires=">= 3.8",
+	python_requires=">= 3.9",
 	classifiers=[
 		'Programming Language :: Python :: 3',
 		'License :: OSI Approved :: GPL3 License',

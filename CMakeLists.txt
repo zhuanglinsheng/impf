@@ -50,29 +50,11 @@ set(SOURCES
 	src/utils.c
 	src/linalg/dscal.c
 	src/linalg/daxpy.c
-	src/linalg/dgels_L.c
-	src/linalg/dgels_n.c
-	src/linalg/dgels_2.c
-	src/linalg/dgels_3.c
-	src/diff/1f1.c
-	src/diff/1f2.c
-	src/diff/1f3.c
-	src/diff/1fn.c
-	src/diff/2f1.c
-	src/diff/2f2.c
-	src/diff/2f3.c
-	src/diff/2fn.c
-	src/diff/3f1.c
-	src/diff/3f2.c
-	src/diff/3f3.c
-	src/diff/3fn.c
+	src/linalg/dgels.c
 	src/diff/mfn.c
-	src/root/1f1_bisection.c
-	src/root/1f1_secant.c
-	src/root/1f1_newton.c
-	src/root/2f2_newton.c
-	src/root/3f3_newton.c
-	src/root/nfn_newton.c
+	src/root/bisection.c
+	src/root/secant.c
+	src/root/newton.c
 	src/lp/readmps.c
 	src/lp/simplex_std.c
 	src/lp/simplex_gen.c
