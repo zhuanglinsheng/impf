@@ -2,7 +2,7 @@
 #include <Python.h>
 #include <impf/fmin.h>
 #include <impf/fmin_lp.h>
-
+#include <stdio.h>
 /*
  * (x, code) = wrapper_impf_lp_simplex(m, n, maxiter, method, bounds, obj, consts...)
  */
@@ -26,7 +26,7 @@ static PyObject* wrapper_impf_lp_simplex(PyObject* self, PyObject* args) {
 	struct impf_LinearConstraint *constraints = impf_malloc(sizeof(struct impf_LinearConstraint) * m);
 	double *x = impf_malloc(sizeof(double) * n);
 	double value;
-	int error_code;
+	int error_code = 0;
 
 	/* Parse bounds */
 	if (bounds != Py_None) {
@@ -81,7 +81,7 @@ static PyObject* wrapper_impf_lp_simplex(PyObject* self, PyObject* args) {
 
 	/* Return object */
 	PyObject *py_x_list = PyList_New(n);
-	PyObject* result = PyTuple_New(2);
+	PyObject *result = PyTuple_New(2);
 
 	for (j = 0; j < n; j++) {
 		PyObject *item = PyFloat_FromDouble(x[j]);

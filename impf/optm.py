@@ -46,7 +46,6 @@ class LinearConstraint:
 	def __repr__(self) -> str:
 		return str(self.coef) + ' ' + self.type + ' ' + str(self.rhs)
 
-
 class LinearProgramming:
 	obj: LinearObjective
 	consts: list[LinearConstraint]
@@ -72,7 +71,7 @@ class LinearProgramming:
 				re += blk + str(self.bounds[i][0]) + ' <= x' + str(i) + \
 					' <= ' + str(self.bounds[i][1]) + '\n'
 		return re
-	def solve(self, method: Literal['bland', ] = 'bland', max_iter: int = 1000) -> dict:
+	def solve(self, method: Literal['bland', 'dantzig'] = 'bland', max_iter: int = 1000) -> dict:
 		if self.obj.type == 'min':
 			obj_coef = self.obj.coef
 		else:

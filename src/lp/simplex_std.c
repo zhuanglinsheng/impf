@@ -193,11 +193,17 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 		q = simplex_bland_enter_rule(table, basis, m, n);
 	else {  /* default method: "pan97" */
 		/* int idx_degen = find_bv_degenerated(table, ldtable, m, n); */
-
+#ifdef IMPF_MODE_DEBUG
+		printf("Pivot failure due to '9: numerical precision error'\n");
+#endif
 		return 9;
 	}
-	if (n <= q)
+	if (n <= q) {
+#ifdef IMPF_MODE_DEBUG
+		printf("Pivot failure due to '9: numerical precision error'\n");
+#endif
 		return 9;
+	}
 	p = simplex_pivot_leave_rule(table, ldtable, m, n, q, &bounded);
 
 	if (bounded == 0)
@@ -233,19 +239,24 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 		case 0:
 			break;
 		case 1:
+#ifdef IMPF_MODE_DEBUG
+		printf(">>> Algorithm stop due to '1: current BSF is optimal'.\n");
+#endif
 			return 1;
 		case 2:
+#ifdef IMPF_MODE_DEBUG
+		printf(">>> Algorithm stop due to '2: LP is unbounded'.\n");
+#endif
 			return 2;
 		case 9:
+#ifdef IMPF_MODE_DEBUG
+		printf(">>> Algorithm stop due to '9: numerical precision error'.\n");
+#endif
 			return 9;
 		}
-#ifdef IMPF_MODE_DEBUG
-		printf("[%u] value = %f - ", *epoch, table[n]);
-		printf("degen-iter = %u\n\n", degen_iter);
-#endif
 		if (check_simplex_circled(table, n, old_value) == 2) {
 			degen_iter++;
-			if (degen_iter > 50)
+			if (degen_iter > 100)
 				return 3;
 		} else
 			degen_iter = 0;
@@ -506,6 +517,9 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 	int nrow, ncol;
 	int nslack, nartif;
 
+#ifdef IMPF_MODE_DEV
+	printf(">>> Reformulate, code = %i\n", *code);
+#endif
 	simplex_table_size_usul(constraints, m, n, &nrow, &ncol);
 	*ldtable = ncol;  /* leading dimension of table in memory */
 	if (simplex_create_buffer(table, basis, constypes, m, nrow, *ldtable) == impf_EXIT_FAILURE) {
@@ -525,6 +539,10 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 	simplex_fill_artiflp_basis(*basis, *constypes, m, n, nslack);
 	simplex_fill_artiflp_nrcost(*table, *ldtable, *constypes, m, ncol);
 
+#ifdef IMPF_MODE_DEV
+	printf(">>> n = %i, nslack = %i, nartif = %i\n", n, nslack, nartif);
+	printf(">>> Pivoting, code = %i\n", *code);
+#endif
 	switch (simplex_pivot_bsc(epoch, *table, *ldtable, *basis, m, *nvar, n + nslack, criteria, niter)) {
 	case 0:
 		*code = impf_ExceedIterLimit;
@@ -539,7 +557,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 		*nvar = n + nslack;
 		return impf_EXIT_SUCCESS;
 	case 2:
-		*code = impf_PrecisionError;
+		*code = impf_Unboundedness;
 		goto END;
 	case 3:
 		*code = impf_Degeneracy;
@@ -600,7 +618,7 @@ int impf_lp_simplex_std(const double *objective, const struct impf_LinearConstra
 	assert(code != NULL);
 
 #ifdef IMPF_MODE_DEV
-	printf("Phase 1 Begin:\n");
+	printf("Phase 1 Begin: code = %i\n", *code);
 #endif
 	if (simplex_phase_1_usul(&table, &ldtable, &basis, &constypes, &nvar, &epoch, code,
 				 constraints, m, n, criteria, niter) == impf_EXIT_FAILURE)
