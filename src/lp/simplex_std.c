@@ -34,29 +34,15 @@ static int is_basis_valid(const int *basis, const int m, const int n)
  *     1    circled but optimal already
  *     2    circled
  */
-static int check_simplex_circled(const double *table, const int n, const double old_value)
+static int check_simplex_degenerated(const double *table, const int n, const double old_value)
 {
-	if (old_value <= table[n] + __impf_CHC_SPLX_CIRCLED__) {
+	if (old_value <= table[n] + __impf_CHC_SPLX_DEGENERATED__) {
 		if (is_simplex_optimal(table, n))
 			return 1;
 		return 2;
 	} else
 		return 0;
 }
-
-/* Return: index of var regarding of simplex table
-
-static int find_bv_degenerated(const double *table, const int ldtable, const int m, const int n)
-{
-	int i;
-
-	for (i = 0; i < m; i++) {
-		if (table[n + (i + 1) * ldtable] < __impf_CTR_SPLX_DEGEN__)
-			return i;
-	}
-	return m;
-}
- */
 
 /* Choose the variable to leave basis
  * Return the index of the variable and check weather LP is "bounded"
@@ -72,7 +58,7 @@ static int simplex_pivot_leave_rule(const double *table, const int ldtable,
 		y_i_0 = table[n + (i + 1) * ldtable];
 		y_i_q = table[q + (i + 1) * ldtable];
 
-		if (y_i_q <= __impf_CTR_SPLX_PIVLEV_ZERO__)
+		if (y_i_q <= __impf_CTR_SPLX_PIV_LEV__)
 			continue;
 		else {
 			x_iq = y_i_0 / y_i_q;
@@ -95,7 +81,7 @@ static int simplex_pivot_leave_rule(const double *table, const int ldtable,
  *	but numerically, there are many criteriors reporting optimality,
  *	leading to unpredicted results
  */
-static int simplex_dantzig_enter_rule(const double *table, const int *basis, const int m, const int n)
+static int simplex_pivot_enter_rule_datzig(const double *table, const int *basis, const int m, const int n)
 {
 	int j, q = n;
 	double beta_j = 0.;
@@ -119,7 +105,7 @@ static int simplex_dantzig_enter_rule(const double *table, const int *basis, con
  *
  * Note: on failure, the algorithm returns n
  */
-static int simplex_bland_enter_rule(const double *table, const int *basis, const int m, const int n)
+static int simplex_pivot_enter_rule_bland(const double *table, const int *basis, const int m, const int n)
 {
 	int j;
 	double epsilon = __impf_CTR_SPLX_BLAND_EPS__;
@@ -188,9 +174,9 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 	if (is_simplex_optimal(table, n))
 		return 1;
 	if (7 == impf_strlen(criteria) && 0 == impf_memcmp("dantzig", criteria, 7))
-		q = simplex_dantzig_enter_rule(table, basis, m, n);
-	else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
-		q = simplex_bland_enter_rule(table, basis, m, n);
+		q = simplex_pivot_enter_rule_datzig(table, basis, m, n);
+	/* else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
+		q = simplex_pivot_enter_rule_bland(table, basis, m, n); */
 	else {  /* default method: "pan97" */
 		/* int idx_degen = find_bv_degenerated(table, ldtable, m, n); */
 #ifdef IMPF_MODE_DEBUG
@@ -254,9 +240,12 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 #endif
 			return 9;
 		}
-		if (check_simplex_circled(table, n, old_value) == 2) {
+		if (check_simplex_degenerated(table, n, old_value) == 2) {
+#ifdef IMPF_MODE_DEBUG
+			printf(">>> Degenerated, value = %s [%i]\n", table[n], degen_iter);
+#endif
 			degen_iter++;
-			if (degen_iter > 100)
+			if (degen_iter > niter / 2)
 				return 3;
 		} else
 			degen_iter = 0;
