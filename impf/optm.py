@@ -1,6 +1,6 @@
 from typing import Literal
 from . import _clib_optm
-
+from . import _io
 
 class LinearObjective:
 	coef: list[float]
@@ -71,7 +71,19 @@ class LinearProgramming:
 				re += blk + str(self.bounds[i][0]) + ' <= x' + str(i) + \
 					' <= ' + str(self.bounds[i][1]) + '\n'
 		return re
-	def solve(self, method: Literal['bland', 'dantzig'] = 'bland', max_iter: int = 1000) -> dict:
+
+	def readMPS(file: str):
+		tokens = _io.readMPS(file)
+		obj = LinearObjective(tokens['obj_coef'], 'min')
+		constraints = []
+		con_coef = tokens['constraints_coef']
+		con_type = tokens['constraints_type']
+		con_rhs = tokens['constraints_rhs']
+		for (coef, type, rhs) in zip(con_coef, con_type, con_rhs):
+			constraints.append(LinearConstraint(coef, type, rhs))
+		return LinearProgramming(obj, constraints, tokens['vars_bound'])
+
+	def solve(self, method: Literal['dantzig'] = 'dantzig', max_iter: int = 1000) -> dict:
 		if self.obj.type == 'min':
 			obj_coef = self.obj.coef
 		else:

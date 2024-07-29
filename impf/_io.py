@@ -153,17 +153,3 @@ def readMPS(filepath: str) -> dict:
 			if mode == 'BOUNDS':
 				pass
 	return re
-
-def parseMPS(tokens: dict) -> optm.LinearProgramming:
-
-	obj = optm.LinearObjective(tokens['obj_coef'], 'min')
-	constraints = []
-	con_coef = tokens['constraints_coef']
-	con_type = tokens['constraints_type']
-	con_rhs = tokens['constraints_rhs']
-
-	for (coef, type, rhs) in zip(con_coef, con_type, con_rhs):
-		constraints.append(optm.LinearConstraint(coef, type, rhs))
-
-	return optm.LinearProgramming(obj, constraints, tokens['vars_bound'])
-
