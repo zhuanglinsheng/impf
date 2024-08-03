@@ -160,7 +160,7 @@ static void simplex_pivot_core(double *table, const int ldtable,
 /* Pivot starting from a basic representation for one round
  *
  * Return:
- *	0: current BFS is NOT optimal
+ *	0: current BFS is NOT optimal (stop before converged)
  *	1: current BSF is optimal
  *	2: LP is unbounded
  *	9: numerical precision error
@@ -173,16 +173,26 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 
 	if (is_simplex_optimal(table, n))
 		return 1;
-	if (7 == impf_strlen(criteria) && 0 == impf_memcmp("dantzig", criteria, 7))
+	if (7 == impf_strlen(criteria) && 0 == impf_memcmp("dantzig", criteria, 7)) {
 		q = simplex_pivot_enter_rule_datzig(table, basis, m, n);
-	/* else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5))
-		q = simplex_pivot_enter_rule_bland(table, basis, m, n); */
+		p = simplex_pivot_leave_rule(table, ldtable, m, n, q, &bounded);
+	}
+	else if (5 == impf_strlen(criteria) && 0 == impf_memcmp("bland", criteria, 5)) {
+		q = simplex_pivot_enter_rule_bland(table, basis, m, n);
+		p = simplex_pivot_leave_rule(table, ldtable, m, n, q, &bounded);
+	}
 	else {  /* default method: "pan97" */
+		q = simplex_pivot_enter_rule_datzig(table, basis, m, n);
+		p = simplex_pivot_leave_rule(table, ldtable, m, n, q, &bounded);
+
 		/* int idx_degen = find_bv_degenerated(table, ldtable, m, n); */
 #ifdef IMPF_MODE_DEBUG
-		printf("Pivot failure due to '9: numerical precision error'\n");
+		impf_prt_matd(table, n + 1, m + 1, n + 1);
+		printf("\n");
+		printf("p = %i, q = %i\nbasis = ", p, q);
+		impf_prt_arri(basis, m, 1);
+		printf("\n");
 #endif
-		return 9;
 	}
 	if (n <= q) {
 #ifdef IMPF_MODE_DEBUG
@@ -190,7 +200,6 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 #endif
 		return 9;
 	}
-	p = simplex_pivot_leave_rule(table, ldtable, m, n, q, &bounded);
 
 	if (bounded == 0)
 		return 2;
@@ -202,7 +211,7 @@ static int simplex_pivot_on(double *table, const int ldtable, int *basis,
 /* Linear Programming: simplex algorithm for solving LP of basic representation
  *
  * Return
- *	0: current BFS is NOT optimal
+ *	0: current BFS is NOT optimal (stop before converged)
  *	1: current BSF is optimal
  *	2: LP is unbounded
  *	3: LP is circled more than accepted times (indicating for degeneracy)
@@ -242,10 +251,10 @@ static int simplex_pivot_bsc(int *epoch, double *table, const int ldtable, int *
 		}
 		if (check_simplex_degenerated(table, n, old_value) == 2) {
 #ifdef IMPF_MODE_DEBUG
-			printf(">>> Degenerated, value = %s [%i]\n", table[n], degen_iter);
+			printf(">>> Degenerated, value = %f [%i]\n", table[n], degen_iter);
 #endif
 			degen_iter++;
-			if (degen_iter > niter / 2)
+			if (degen_iter > 5)
 				return 3;
 		} else
 			degen_iter = 0;
@@ -530,6 +539,7 @@ static int simplex_phase_1_usul(double **table, int *ldtable, int **basis, int *
 
 #ifdef IMPF_MODE_DEV
 	printf(">>> n = %i, nslack = %i, nartif = %i\n", n, nslack, nartif);
+	printf(">>> table size = (%i, %i)\n", nrow, ncol);
 	printf(">>> Pivoting, code = %i\n", *code);
 #endif
 	switch (simplex_pivot_bsc(epoch, *table, *ldtable, *basis, m, *nvar, n + nslack, criteria, niter)) {
@@ -566,6 +576,10 @@ static int simplex_phase_2_usul(double *table, int ldtable, int *basis, int *con
 				int *epoch, int *code, const int m, const int n,
 				const int nvar, const char *criteria, const int niter)
 {
+#ifdef IMPF_MODE_DEV
+	printf(">>> m = %i, n = %i, nvar = %i\n", m, n, nvar);
+	printf(">>> Pivoting, code = %i\n", *code);
+#endif
 	switch (simplex_pivot_bsc(epoch, table, ldtable, basis, m, nvar, nvar, criteria, niter)) {
 	case 0:
 		*code = impf_ExceedIterLimit;

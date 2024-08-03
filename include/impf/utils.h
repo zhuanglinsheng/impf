@@ -85,10 +85,10 @@ double impf_atof(const char* str);
  ******************************************************************************/
 
 /* developing mode (only for development) */
-/* #define IMPF_MODE_DEV */
+#define IMPF_MODE_DEV
 
 /* debug mode (only for for development) */
-/* #define IMPF_MODE_DEBUG */
+#define IMPF_MODE_DEBUG
 
 #ifdef __cpluscplus
 }

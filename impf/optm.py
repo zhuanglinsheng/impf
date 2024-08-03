@@ -1,6 +1,7 @@
-from typing import Literal
+from __future__ import annotations
+from typing import Literal, Optional
 from . import _clib_optm
-from . import _io
+from . import _utils
 
 class LinearObjective:
 	coef: list[float]
@@ -46,14 +47,15 @@ class LinearConstraint:
 	def __repr__(self) -> str:
 		return str(self.coef) + ' ' + self.type + ' ' + str(self.rhs)
 
+
 class LinearProgramming:
 	obj: LinearObjective
 	consts: list[LinearConstraint]
-	bounds: list[tuple[float, float]]
+	bounds: Optional[list[tuple[float, float]]]
 
 	def __init__(self, obj: LinearObjective,
 			consts: list[LinearConstraint],
-			bounds: list[tuple[float, float]] = None) -> None:
+			bounds: Optional[list[tuple[float, float]]] = None) -> None:
 		if (bounds is not None) and len(bounds) != len(obj.coef):
 			raise ValueError('len(obj.coef) = {} but len(bounds) = {}'.format(len(obj.coef), len(bounds)))
 		self.obj = obj
@@ -73,7 +75,7 @@ class LinearProgramming:
 		return re
 
 	def readMPS(file: str):
-		tokens = _io.readMPS(file)
+		tokens = _utils.readMPS(file)
 		obj = LinearObjective(tokens['obj_coef'], 'min')
 		constraints = []
 		con_coef = tokens['constraints_coef']
@@ -83,7 +85,7 @@ class LinearProgramming:
 			constraints.append(LinearConstraint(coef, type, rhs))
 		return LinearProgramming(obj, constraints, tokens['vars_bound'])
 
-	def solve(self, method: Literal['dantzig'] = 'dantzig', max_iter: int = 1000) -> dict:
+	def solve(self, method: Literal['', 'dantzig'] = '', max_iter: int = 1000) -> dict:
 		if self.obj.type == 'min':
 			obj_coef = self.obj.coef
 		else:
@@ -103,7 +105,6 @@ class LinearProgramming:
 			self.bounds, obj_coef, consts_coef, consts_rhs, consts_type
 		)
 		re['x'] = x
-
 		if code == 0:
 			re['state'] = 'Success'
 		elif code == 1:
